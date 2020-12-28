@@ -96,6 +96,7 @@
         <el-table-column property="userName" label="买家名称" width="200"></el-table-column>
         <el-table-column property="userNumber" label="电话号码"></el-table-column> 
       </el-table> 
+      <input type="text">
     </el-dialog>
   </div>
   <div class="SG-fenye">
