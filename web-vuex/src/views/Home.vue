@@ -29,7 +29,7 @@
               <i class="el-icon-location"></i>
               <span>商品管理</span>
             </template>
-            <el-menu-item-group class="listTwo">
+            <el-menu-item-group>
               <el-menu-item index="1-1" >
                 <router-link to="/about/fenlei">分类管理</router-link>
               </el-menu-item>
@@ -49,7 +49,7 @@
               <i class="el-icon-menu"></i>
               <span>订单管理</span>
             </template>
-            <el-menu-item-group class="listTwo">
+            <el-menu-item-group>
               <el-menu-item index="2-1">
                  <router-link to="/about/order">订单管理</router-link>
               </el-menu-item>
@@ -61,10 +61,10 @@
           </el-submenu>
           <el-submenu index="3">
             <template slot="title">
-              <i class="el-icon-document"></i>
+              <i class="el-icon-s-goods"></i>
               <span>发货管理</span>
             </template>
-            <el-menu-item-group class="listTwo">
+            <el-menu-item-group>
               <el-menu-item index="3-1">
                  <router-link to="/about/sendgoods">发货管理</router-link>
               </el-menu-item>
@@ -73,10 +73,10 @@
           </el-submenu>
           <el-submenu index="4">
             <template slot="title">
-              <i class="el-icon-document"></i>
+              <i class="el-icon-office-building"></i>
               <span>仓库管理</span>
             </template>
-            <el-menu-item-group class="listTwo">
+            <el-menu-item-group>
               <el-menu-item index="4-1">
                  <router-link to="/about/warehouse">仓库管理</router-link>
               </el-menu-item>
@@ -86,10 +86,10 @@
           </el-submenu>
           <el-submenu index="5">
             <template slot="title">
-              <i class="el-icon-document"></i>
+              <i class="el-icon-user-solid"></i>
               <span>员工管理</span>
             </template>
-            <el-menu-item-group class="listTwo">
+            <el-menu-item-group>
               <el-menu-item index="5-1">
                 <router-link to="/about/role">角色管理</router-link>
               </el-menu-item>
@@ -131,7 +131,7 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 html{
   height: 100%;
 }
@@ -140,8 +140,8 @@ body{
 }
 //左侧菜单栏宽度
 .home {
-  width: 250px;
-  height: 800px;
+  width: 200px;
+  height: 735px;
 }
 //登录用户头像
 .headImg{
@@ -162,13 +162,12 @@ p{
   margin-top: 20px;
 }
 span{
-  font-size: 20px;
+  font-size: 14px;
   font-weight: 100px;
 }
-.listTwo{
-  font-size: 18px;
-}
 
+
+//左侧菜单栏颜色样式
 .router-link-active {     
   text-decoration: none;
   color: teal;
@@ -176,6 +175,6 @@ span{
  a {
   text-decoration: none; 
   color: #fff;
-  font-size: 16px;
+  font-size: 14px;
  }
 </style>
