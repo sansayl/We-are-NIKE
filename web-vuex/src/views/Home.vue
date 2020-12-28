@@ -156,14 +156,14 @@ body{
 }
 p{
   margin-top: 0;
-  color: white;
+  // color: white;
 }
 .demo-image{
   margin-top: 20px;
 }
 span{
-  font-size: 20px;
-  font-weight: 100px;
+  // font-size: 20px;
+  // font-weight: 100px;
 }
 .listTwo{
   font-size: 18px;
