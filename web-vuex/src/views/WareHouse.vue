@@ -20,7 +20,7 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="submitSelect('formInline')">查询</el-button>
-          <el-button type="primary" @click="dialogVisible = true"
+          <el-button type="primary" @click="dialogVisible = true" class="wareAddBt"
             >新增</el-button
           >
           <el-button type="primary" @click="resetForm('formInline')">重置</el-button>
@@ -30,33 +30,26 @@
     <!-- 中间表格 -->
     <div class="contTable">
       <template>
-        
         <el-table :data="tableData" border style="width: 100%"  @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="55"> </el-table-column>
           <el-table-column prop="houseId" label="仓库编号" width="180">
           </el-table-column>
-          <el-table-column prop="houseName" label="仓库名称" width="160">
+          <el-table-column prop="houseName" label="仓库名称" width="180">
           </el-table-column>
-          <el-table-column prop="houseAddress" label="仓库地址" width="160">
+          <el-table-column prop="houseAddress" label="仓库地址" width="180">
           </el-table-column>
-          <el-table-column prop="houseMang" label="仓库管理员" width="160">
+          <el-table-column prop="houseMang" label="仓库管理员" width="180">
           </el-table-column>
-          <el-table-column prop="houseMangTel" label="电话号码" width="160">
+          <el-table-column prop="houseMangTel" label="电话号码" width="180">
           </el-table-column>
           <el-table-column fixed="right" label="操作" width="200">
-            <template>
-              <el-button @click="dialogVisible = true" type="text" size="small"
-                >编辑</el-button
-              >
-              <el-button type="text" size="small" @click="dialogVisible = true"
-                >查看</el-button
-              >
-              <template>
+              
+                <el-button @click="dialogVisible = true" type="text" size="small"  >编辑</el-button>
+                <el-button type="text" size="small" @click="dialogVisible = true"  >查看</el-button>  
                 <el-popconfirm title="确定删除吗？">
-                  <el-button slot="reference">删除</el-button>
+                    <el-button slot="reference">删除</el-button>
                 </el-popconfirm>
-              </template>
-            </template>
+             
           </el-table-column>
         </el-table>
       </template>
@@ -115,6 +108,7 @@
 .wareHouse {
   padding: 20px;
 }
+
 </style>
 <script>
 export default {
@@ -252,6 +246,13 @@ export default {
 }
 .el-form {
   padding-left: 20px;
+}
+//新增按钮样式
+.el-button {
+  border: none;
+}
+.wareAddBt{
+  background: #67c23a;
 }
 //中间数据表格
 .contTable {

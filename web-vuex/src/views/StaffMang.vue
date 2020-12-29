@@ -54,7 +54,7 @@
           <el-table-column prop="address" label="地址"> </el-table-column>
           <el-table-column fixed="right" label="操作" width="200">
             <template>
-              <el-button @click="dialogVisible = true" type="text" size="small"
+              <el-button @click="dialogVisible = true" type="text" size="small" 
                 >编辑</el-button
               >
               <el-button type="text" size="small" @click="dialogVisibles = true"
@@ -337,5 +337,8 @@ export default {
 }
 .el-pagination {
   padding: 0;
+}
+.clearfix {
+  clear: both;
 }
 </style>
