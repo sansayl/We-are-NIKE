@@ -130,12 +130,7 @@ body {
 .el-main {
   background-color: #e9eef3;
   color: #333;
-<<<<<<< HEAD
   padding: 0px !important;
-=======
-  // text-align: center;
-  // line-height: 160px;
->>>>>>> dcf194deba4d2f1d16692ed8b6989ffe4c92aca5
 }
 
 body > .el-container {

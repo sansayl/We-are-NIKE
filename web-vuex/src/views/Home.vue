@@ -162,13 +162,8 @@ p{
   margin-top: 20px;
 }
 span{
-<<<<<<< HEAD
   font-size: 14px;
   font-weight: 100px;
-=======
-  // font-size: 20px;
-  // font-weight: 100px;
->>>>>>> dcf194deba4d2f1d16692ed8b6989ffe4c92aca5
 }
 
 
