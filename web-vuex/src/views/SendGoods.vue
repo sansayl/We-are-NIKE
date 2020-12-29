@@ -1,6 +1,41 @@
 <template>
 <div>
   <h1>发货管理页</h1>
+  <div class="staffSelect">
+      <template>
+        <el-form :inline="true" :model="formInline" class="demo-form-inline">
+          <el-form-item label="">
+            <el-input
+              v-model="formInline.user"
+              placeholder="员工姓名"
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="">
+            <el-select v-model="formInline.role" placeholder="角色">
+              <el-option label="一般店员" value="一般店员"></el-option>
+              <el-option label="仓库管理员" value="仓库管理员"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="">
+            <el-input
+              v-model="formInline.tel"
+              placeholder="电话号码"
+            ></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="onSubmit">查询</el-button>
+            <el-button
+              type="primary"
+              class="staffAddBt"
+              @click="dialogVisible = true"
+              >新增</el-button
+            >
+            <el-button @click="resetForm('numberValidateForm')">重置</el-button>
+          </el-form-item>
+          <el-form-item> </el-form-item>
+        </el-form>
+      </template>
+    </div>
   <div class="SG-data">
     <el-table :data="tableData" border style="width: 100%">
       <el-table-column
@@ -58,7 +93,7 @@
         label="操作"
         width="100">
         <template slot-scope="">
-          <el-button type="text" @click="SGdetail = true">详情</el-button>
+          <el-button type="text" @click="SGdetail = true" class="fontS">详情</el-button>
           <el-button type="text" @click="SGedit = true" size="small">编辑</el-button>
         </template>
       </el-table-column>
@@ -95,8 +130,19 @@
         <el-table-column property="productName" label="商品名称" width="150"></el-table-column>
         <el-table-column property="userName" label="买家名称" width="200"></el-table-column>
         <el-table-column property="userNumber" label="电话号码"></el-table-column> 
-      </el-table> 
-      <input type="text">
+      </el-table>
+      <div style="margin: 20px;"></div>
+      <el-form  label-width="80px" :model="formLabelAlign">
+          <el-form-item label="物流单号 :" width="100">
+            <el-input v-model="formLabelAlign.name" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="发货地址 :">
+            <el-input v-model="formLabelAlign.region" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="发货状态 :">
+            <el-input v-model="formLabelAlign.type" clearable></el-input>
+          </el-form-item>
+      </el-form>
     </el-dialog>
   </div>
   <div class="SG-fenye">
@@ -113,11 +159,52 @@
       },
       az(){
         // console.log(this.);
-      }
+      },
+       // 提交
+      onSubmit() {
+        console.log("submit!");
+      },
+      // 重置
+      resetForm(formName) {
+        // this.$refs[formName].resetFields();
+      },
+      // 查看
+      handleClick(row) {
+        console.log(row);
+      },
+      //关闭新增弹窗
+      // handleClose(done) {
+      //   this.$confirm("确认关闭？")
+      //     .then((_) => {
+      //       done();
+      //     })
+      //     .catch((_) => {});
+      // },
+      //新增提交
+      submitForm(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            alert("submit!");
+          } else {
+            console.log("error submit!!");
+            return false;
+          }
+        });
+      },
     },
     
     data() {
       return {
+        formInline: {
+          user: "",
+          role: "",
+          tel:""
+        },
+        formLabelAlign: {
+          name: '',
+          region: '',
+          type: ''
+        },
         block:'block',
         none:'none',
         value:'',
@@ -176,5 +263,29 @@
   }
   .SG-data{
     margin-top: 30px;
+  }
+  .fontS{
+    font-size: 14px;
+  }
+  .staffSelect {
+  width: 100%;
+  height: 60px;
+  //background: teal;
+  padding-top: 20px;
+  border-top: gray;
+  }
+  //搜索
+  .el-form-item {
+    margin-bottom: 0 !important;
+  }
+  .el-form {
+    padding-left: 20px;
+  }
+  //新增按钮样式
+  .el-button {
+    border: none;
+  }
+  .staffAddBt {
+    background: #67c23a;
   }
 </style>
