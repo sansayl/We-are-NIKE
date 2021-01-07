@@ -1,218 +1,57 @@
 <template>
   <div id="app">
-    <el-container>
-      <el-header line-height="60px">
-        <div class="systemImg">
-          <img
-            class="logo"
-            src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2072177575,1951826205&fm=26&gp=0.jpg"
-            alt=""
-          />
-        </div>
-        <div class="systemName">We are Nike</div>
-        <div class="systemUser">
-          <div class="headImgs">
-            <el-row class="demo-avatar demo-basic ">
-              <el-col :span="12">
-                <div class="sub-title"></div>
-                <div class="demo-basic--circle">
-                  <div class="block">
-                    <el-avatar :size="50" :src="circleUrl"></el-avatar>
-                  </div>
-                </div>
-              </el-col>
-            </el-row>
-          </div>
-          <div class="headList">
-            <el-menu
-              :default-active="activeIndex2"
-              class="el-menu-demo"
-              mode="horizontal"
-              @select="handleSelect"
-              background-color="#001529"
-              text-color="#fff"
-              active-text-color="#001529">
-              <el-submenu index="1">
-                <template slot="title">我的工作台</template>
-                <el-menu-item index="2-1">首页</el-menu-item>
-                <el-menu-item index="2-2">用户信息</el-menu-item>
-                <el-menu-item index="2-3">修改密码</el-menu-item>
-                <el-menu-item index="2-3">退出登录</el-menu-item>
-              </el-submenu>
-            </el-menu>
-          </div>
-        </div>
-      </el-header>
-      <el-container>
-        <el-aside width="200px">
-          <Home></Home>
-        </el-aside>
-        <el-main class="cont">
-          <About></About>
-        </el-main>
-      </el-container>
-    </el-container>
-    <!-- <router-view/> -->
+
+    <div >
+      <Login class="l1" v-if="$store.state.islogin"></Login>
+      <router-view v-else></router-view>
+    </div>
   </div>
 </template>
 
 <script>
-import Home from "@/views/Home.vue";
-import About from "@/views/About.vue";
+  import Login from '@/views/Login';
+  import Main from '@/views/Main';
 
-export default {
-  name: "app",
+  export default {
+    name:'app',
+    data:function(){
+      return{
+        msg:true,
+        islogin:true
+        }
+      },
+    components: {
+      // HelloWorld
+      Login,
+      Main
+    },
+    mounted(){
+      // console.log(window.location.href)
+    }
 
-  components: {
-    Home,
-    About,
-  },
-  data() {
-    return {
-      isCollapse: true,
-      circleUrl:
-        "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
-      sizeList: ["large"],
-      // 顶部登录退出
-      activeIndex: "1",
-      activeIndex2: "1",
-    };
-  },
-  methods: {
-    handleOpen(key, keyPath) {
-      console.log(key, keyPath);
-    },
-    handleClose(key, keyPath) {
-      console.log(key, keyPath);
-    },
-    // 顶部登录退出
-    handleSelect(key, keyPath) {
-        console.log(key, keyPath);
-      }
-  },
-};
+  }
+
+// import About from "@/views/About.vue";
+
+
 </script>
 
 
-<style  >
-* {
-  margin: 0;
-  padding: 0;
-}
-html,
-body {
-  width: 100%;
-}
-#app {
-  width: 100%;
-}
-.el-container {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  /* height: 100%; */
-}
-.el-header,
-.el-footer {
-  background-color: #001529;
-  color: #333;
-}
-
-.el-aside {
-  background-color: #001529;
-  color: #333;
-  /* // text-align: center;
-  // line-height: 700px;
-  // height:80%;
-  //width: 200px; */
-}
-
-.el-main {
-  background-color: #e9eef3;
-  color: #333;
-  padding: 0px !important;
-}
-
-body > .el-container {
-  margin-bottom: 40px;
-}
-
-.el-container:nth-child(5) .el-aside,
-.el-container:nth-child(6) .el-aside {
-  line-height: 260px;
-}
-
-.el-container:nth-child(7) .el-aside {
-  line-height: 320px;
-}
-
-/* //顶部 */
-.systemImg {
-  width: 33.3%;
-  height: 60px;
+<style lang="less" >
+  *{
+    padding: 0;
+    margin: 0;
+  }
+#app{
+  height: 100%;
+ // background: url("assets/images/4.jpg")  no-repeat !important;
+  background-size: cover ;
   overflow: hidden;
-  float: left;
-  /* background: pink; */
 }
-/* //左侧logo */
-.logo {
-  width: 170px;
-  height: 60px;
-  vertical-align: top;
-}
-.systemName {
-  width: 33.3%;
-  text-align: center;
-  line-height: 60px;
-  font-size: 20px;
-  font-weight: bold;
-  float: left;
-  color: white;
+  .l1{
+    margin: 200px 500px;
 
-  /* //background: tomato; */
-}
-/* //顶部右边样式 */
-.systemUser {
-  width: 33.3%;
-  /* line-height: 60px; */
-  float: left;
-  padding-top: 5px;
-}
-.headImgs {
-  width: 60%;
-  float: left;
-  margin-right: 10px;
-  
-}
-.demo-avatar{
-  float: right;
-
-}
-/* 顶部右边样式 */
-.headList{
-  width: 30%;
-  /* line-height: 60px; */
-  /* background: pink; */
-  float: left;
-  overflow: hidden;
-  height: 60px;
-
-}
-
-/* .el-menu ,.el-submenu{
-  height: 40px !important;
-  line-height: 40px;
-} */
-.el-menu--horizontal>.el-submenu .el-submenu__title{
-  height: 40px !important;
-  line-height: 60px;
-  border-bottom: 0px !important;
-}
-/* 顶部右侧的文字 */
-.el-menu::after, .el-menu::before{
-  display: none;
-}
-
+  }
 </style>
 
 

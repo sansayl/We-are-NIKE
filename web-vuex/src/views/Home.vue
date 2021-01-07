@@ -3,7 +3,6 @@
     <div class="headImg">
       <div class="demo-image">
             <div class="block" v-for="fit in fits" :key="fit">
-              <!-- <span class="demonstration"></span> -->
               <el-image
                 style="width: 100px; height: 100px"
                 :src="url"
@@ -11,7 +10,7 @@
               ></el-image>
             </div>
           </div>
-      <p>你好:欢迎回来</p>
+      <p>你好:{{Login_employee}}欢迎回来</p>
     </div>
     <el-row class="tac"  >
       <el-col :span="24" >
@@ -101,13 +100,12 @@
           </el-submenu>
         </el-menu>
       </el-col>
+      
     </el-row>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-// import HelloWorld from '@/components/HelloWorld.vue'
 export default {
   name: "home",
   components: {
@@ -115,10 +113,14 @@ export default {
   },
   data() {
     return {
+      Login_employee:'',
       isCollapse: true,
         fits: ['fill'],
         url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
     };
+  },
+  mounted(){
+        this.Login_employee=window.sessionStorage.getItem("employee");
   },
   methods: {
     handleOpen(key, keyPath) {
@@ -154,9 +156,13 @@ body{
   height: 120px;
   border:1px solid
 }
-p{
+.headImg p{
+  height: 30px;
   margin-top: 0;
-  // color: white;
+  color: white;
+  text-align: center;
+  font-size: 12px;
+  line-height: 30px;
 }
 .demo-image{
   margin-top: 20px;

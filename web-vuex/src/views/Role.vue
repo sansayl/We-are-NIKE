@@ -1,37 +1,44 @@
 <template>
   <div class="page1">
+    <!-- 面包屑导航区域 -->
+    <el-breadcrumb separator-class="el-icon-arrow-right">
+      <el-breadcrumb-item :to="{ path: '/about/welcome' }"
+        >首页</el-breadcrumb-item
+      >
+      <el-breadcrumb-item>员工管理</el-breadcrumb-item>
+      <el-breadcrumb-item>角色管理</el-breadcrumb-item>
+    </el-breadcrumb>
+    <!-- 查询 -->
     <div class="roleSelect">
       <template>
         <el-form
           :inline="true"
-          :model="formInline"
-          ref="formInline"
+          :model="selectData"
+          ref="selectData"
           class="demo-form-inline"
         >
-          <el-form-item label="" prop="roleNam">
+          <el-form-item label="" prop="rolename">
             <el-input
-              v-model="formInline.roleNam"
+              v-model="selectData.rolename"
               placeholder="角色名称"
             ></el-input>
           </el-form-item>
 
-          <el-form-item label="" prop="roleCod">
+          <el-form-item label="" prop="rolenumber">
             <el-input
-              v-model="formInline.roleCod"
+              v-model="selectData.rolenumber"
               placeholder="角色编码"
             ></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="submitForm('formInline')"
-              >查询</el-button
-            >
+            <el-button type="primary" @click="roleSelect">查询</el-button>
             <el-button
               type="primary"
               class="rloeAddBt"
-              @click="dialogVisible = true"
+              @click="addVisible = true"
               >新增</el-button
             >
-            <el-button @click="resetForm('formInline')">重置</el-button>
+            <el-button @click="resetSelect('selectData')">重置</el-button>
           </el-form-item>
           <el-form-item> </el-form-item>
         </el-form>
@@ -42,28 +49,41 @@
       <template>
         <el-table
           :data="tableData"
+          @row-click="getDataClick"
           border
           style="width: 100%"
           @selection-change="handleSelectionChange"
         >
           <el-table-column type="selection" width="55"> </el-table-column>
-          <el-table-column prop="roleCode" label="角色编码" style="width: 30%">
+          <el-table-column
+            prop="rolenumber"
+            label="角色编码"
+            style="width: 30%"
+          >
           </el-table-column>
 
-          <el-table-column prop="roleName" label="角色名称" style="width: 30%">
+          <el-table-column prop="rolename" label="角色名称" style="width: 30%">
           </el-table-column>
-          <el-table-column prop="roleUse" label="是否可用" style="width: 30%">
+          <el-table-column prop="isuse" label="是否可用" style="width: 30%">
+            <template slot-scope="scope">
+              <span v-if="scope.row.isuse == 1">可用</span>
+              <span v-if="scope.row.isuse == 2">不可用</span>
+            </template>
           </el-table-column>
           <el-table-column fixed="right" label="操作" style="width: 40%">
             <template>
-              <el-button @click="dialogVisible = true" type="text" size="small"
+              <el-button @click="editVisible = true" type="text" size="small"
                 >编辑</el-button
               >
-              <el-button @click="roleVisible = true" type="text" size="small"
+              <el-button @click="setRole()" type="text" size="small"
                 >设置权限</el-button
               >
-              <el-button type="text" size="small" @click="dialogVisible = true"
-                >查看</el-button
+              <el-button
+                type="text"
+                size="small"
+                @click="roleDele"
+                class="tabDelBt"
+                >删除</el-button
               >
             </template>
           </el-table-column>
@@ -71,7 +91,7 @@
       </template>
     </div>
     <!-- 页码 -->
-    <div class="rolePage">
+    <!-- <div class="rolePage">
       <div class="block">
         <div class="block">
           <el-pagination
@@ -86,40 +106,79 @@
           </el-pagination>
         </div>
       </div>
-    </div>
+    </div> -->
     <!-- 新增弹窗 -->
-    <el-dialog title="新增" :visible.sync="dialogVisible" width="30%">
+    <el-dialog title="新增" :visible.sync="addVisible" width="30%">
       <el-form
-        :model="ruleForm"
-        :rules="rules"
-        ref="ruleForm"
+        :model="addRoleData"
+        :rules="addrule"
+        ref="addRoleData"
         label-width="100px"
         class="demo-ruleForm"
       >
-        <el-form-item label="角色名称" prop="roleName">
-          <el-input v-model="ruleForm.roleName"></el-input>
+        <el-form-item label="角色名称" prop="rolename">
+          <el-input v-model="addRoleData.rolename"></el-input>
         </el-form-item>
-        <el-form-item label="角色编码" prop="roleCode">
-          <el-input v-model="ruleForm.roleCode"></el-input>
-        </el-form-item>
-
-        <el-form-item label="是否可用" prop="roleUse">
-          <el-radio v-model="radio" label="1">可用</el-radio>
-          <el-radio v-model="radio" label="2">不可用</el-radio>
+        <el-form-item label="角色编码" prop="rolenumber">
+          <el-input v-model="addRoleData.rolenumber"></el-input>
         </el-form-item>
 
-        <el-form-item label="描述" prop="roleDesc">
+        <el-form-item label="是否可用" prop="isuse">
+          <el-radio v-model="addRoleData.isuse" label="1">可用</el-radio>
+          <el-radio v-model="addRoleData.isuse" label="2">不可用</el-radio>
+        </el-form-item>
+
+        <el-form-item label="描述" prop="description">
           <el-input
             type="textarea"
             :rows="4"
             placeholder="请输入内容"
-            v-model="textarea">
+            v-model="addRoleData.description"
+          >
           </el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false"
+        <el-button @click="addVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addData('addRoleData')"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
+    <!-- 编辑弹窗 -->
+    <el-dialog title="编辑" :visible.sync="editVisible" width="30%">
+      <el-form
+        :model="thisRowData"
+        :rules="addrule"
+        ref="addRoleData"
+        label-width="100px"
+        class="demo-ruleForm"
+      >
+        <el-form-item label="角色名称" prop="rolename">
+          <el-input v-model="thisRowData.rolename"></el-input>
+        </el-form-item>
+        <el-form-item label="角色编码" prop="rolenumber">
+          <el-input v-model="thisRowData.rolenumber"></el-input>
+        </el-form-item>
+
+        <el-form-item label="是否可用" prop="isuse">
+          <el-radio v-model="thisRowData.isuse" label="1">可用</el-radio>
+          <el-radio v-model="thisRowData.isuse" label="2">不可用</el-radio>
+        </el-form-item>
+
+        <el-form-item label="描述" prop="description">
+          <el-input
+            type="textarea"
+            :rows="4"
+            placeholder="请输入内容"
+            v-model="thisRowData.description"
+          >
+          </el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="editVisible = false">取 消</el-button>
+        <el-button type="primary" @click="editRoleData('addRoleData')"
           >确 定</el-button
         >
       </span>
@@ -135,14 +194,14 @@
         :data="dataTree"
         show-checkbox
         node-key="id"
-        :default-expanded-keys="[2, 3]"
-        :default-checked-keys="[5]"
+        ref="tree"
         :props="defaultProps"
+        :default-checked-keys="choosedatatree"
       >
       </el-tree>
       <span slot="footer" class="dialog-footer">
         <el-button @click="roleVisible = false">取 消</el-button>
-        <el-button type="primary" @click="roleVisible = false">确 定</el-button>
+        <el-button type="primary" @click="getCheckedNodes">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -155,141 +214,281 @@ export default {
   data() {
     return {
       // 查询数据
-      formInline: {
-        roleNam: "",
-        roleCod: "",
+      radio: "2",
+      //查询数据
+      selectData: {},
+      // 新增数据
+      addRoleData: {
+        rolename: "",
+        rolenumber: "",
+        description: "",
+        isuse: "",
+        id: "",
+      },
+      //新增输入验证
+      addrule: {
+        rolename: [
+          { required: true, message: "请输入角色名称", trigger: "blur" },
+          {
+            min: 3,
+            max: 10,
+            message: "长度在 3 到 10 个字符",
+            trigger: "blur",
+          },
+        ],
+        rolenumber: [
+          { required: true, message: "请输入角色编码", trigger: "blur" },
+          // { min: 3, max: 5, message: "长度在 3 到 7 个字符", trigger: "blur" },
+        ],
       },
       //表内容数据
       tableData: [
         {
-          roleName: "一般店员",
-          roleCode: "c0001",
-          roleUse:"可用"
-        },
-        {
-          roleName: "一般店员",
-          roleCode: "c0001",
-          roleUse:"可用"
+          roleName: "",
+          roleCode: "",
+          roleUse: "",
         },
       ],
+      //当前点击的数据
+      thisRowData: {
+        rolename: "",
+        rolenumber: "",
+        description: "",
+        isuse: "1",
+        id: 0,
+      },
+
+      // 提交权限的数组
+      pushrole: [],
       // 新增页弹窗
-      dialogVisible: false,
-      // 新增数据
-      ruleForm: {
-        roleName: "",
-        roleCode: "",
-      },
+      addVisible: false,
+      // 编辑页弹窗
+      editVisible: false,
+      //权限页弹窗
+      roleVisible: false,
       // 新增是否可用
-       radio: '1',
+      radio: "1",
       //  新增输入框
-      textarea: '',
-      //新增输入验证
-      rules: {
-        roleName: [
-          { required: true, message: "请输入角色名称", trigger: "blur" },
-          {
-            min: 5,
-            max: 40,
-            message: "长度在 5 到 40 个字符",
-            trigger: "blur",
-          },
-        ],
-        roleCode: [
-          { required: true, message: "请输入角色编码", trigger: "blur" },
-          { min: 3, max: 5, message: "长度在 3 到 5 个字符", trigger: "blur" },
-        ],
-      },
+      textarea: "",
       //页码
       currentPage1: 5,
       currentPage2: 5,
       currentPage3: 5,
       currentPage4: 4,
-      //权限页弹窗
-      roleVisible: false,
       // 权限树数据
-      dataTree: [
-        {
-          id: 1,
-          label: "商品管理",
-          children: [
-            {
-              id: 4,
-              label: "分类管理",
-              children: [
-                {
-                  id: 9,
-                  label: "三级 1-1-1",
-                },
-                {
-                  id: 10,
-                  label: "三级 1-1-2",
-                },
-              ],
-            },
-            {
-              id: 5,
-              label: "尺寸管理",
-            },
-          ],
-        },
-        {
-          id: 2,
-          label: "订单管理",
-          children: [
-            {
-              id: 5,
-              label: "二级 2-1",
-            },
-            {
-              id: 6,
-              label: "二级 2-2",
-            },
-          ],
-        },
-        {
-          id: 3,
-          label: "发货管理",
-          children: [
-            {
-              id: 7,
-              label: "二级 3-1",
-            },
-            {
-              id: 8,
-              label: "二级 3-2",
-            },
-          ],
-        },
-      ],
+      newdataTree: [],
+      dataTree: [],
+      //被选中的权限树节点数组
+      choosedatatree: [],
       defaultProps: {
         children: "children",
-        label: "label",
+        label: "powername",
       },
     };
   },
+  // 组件加载请求列表接口
+  mounted() {
+    this.selectRoleAll(); // 获取请求列表
+    this.pushRole(); //获取所有权限菜单
+  },
   methods: {
-    //页码
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
-    },
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
-    },
-
-    // 查询按钮
-    submitForm(formName) {
+    // 新增
+    addData(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert("submit!");
+          this.$axios({
+            url: "/role/add",
+            method: "post",
+            data: this.addRoleData,
+          })
+            .then((res) => {
+              //console.log(res);
+              alert("新增成功");
+              this.addVisible = false;
+            })
+            .catch((err) => {
+              alert(err);
+            });
         } else {
           console.log("error submit!!");
           return false;
         }
       });
     },
+    // 数据列表
+    selectRoleAll() {
+      this.$axios({
+        url: "/role/all",
+        method: "get",
+      })
+        .then((res) => {
+          console.log(res,'所有角色数据');
+          this.tableData = res.data.date; //获取表格数据
+          this.tableTotal = Number(res.count); //获取列表数据总数
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    // 点击获取一行数据
+    getDataClick(val) {
+      // val.isuse = val.isuse.toString();
+      this.thisRowData = val;
+      console.log(val, "当前行");
+    },
+    //编辑
+    editRoleData() {
+      this.$axios({
+        url: "/role/update",
+        method: "post",
+        data: this.thisRowData,
+      })
+        .then((res) => {
+          alert("修改成功"), (this.editVisible = false);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    // 页面进入后直接调用接口查询所有权限渲染权限页
+    pushRole() {
+      this.$axios({
+        url: "/power/find",
+        method: "get",
+      })
+        .then((res) => {
+          //console.log(res, "权限树");
+          if (res.data) {
+            this.dataTree.splice(0, this.dataTree.length);
+            for (let key in res.data.date) {
+              let menuData = {
+                id: key,
+                powername: key,
+                powerurl: "",
+                parentId: "",
+                children: [],
+              };
+              res.data.date[key].forEach((item) => {
+                menuData.children.push(item);
+              });
+              this.dataTree.push(menuData);
+            }
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    // 设置角色
+    setRole() {
+      this.choosedatatree =[],
+      this.roleVisible = true;
+      this.$axios({
+        url: "/role/powers",
+        method: "get",
+        params: {
+          id: this.thisRowData.id,
+        },
+      })
+        .then((res) => {
+         
+       
+          this.choosedatatree = res.data.date;
+          console.log(this.thisRowData.id, "当前行的id");
+          console.log(res.data.date,'返回的值')
+          console.log(this.choosedatatree, "当前角色拥有的权限");
+          console.log(this.choosedatatree, "遍历后的数组");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    getCheckedNodes() {
+      let clickroldata = this.$refs.tree.getCheckedNodes();
+      console.log(clickroldata, "完整");
+      this.pushrole = [];
+      for (let i = 0; i < clickroldata.length; i++) {
+        this.pushrole.push(clickroldata[i].id);
+        this.pushrole = this.pushrole.filter(
+          (item) => typeof item !== "string"
+        );
+      }
+      console.log(this.pushrole, "数组");
+      this.$axios({
+        url: "/power/setpwr",
+        method: "post",
+        data: {
+          id: this.thisRowData.id,
+          powerids: this.pushrole,
+        },
+      })
+        .then((res) => {
+          alert("权限设置成功"), (this.roleVisible = false);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    //删除
+    roleDele() {
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          this.$axios({
+            url: "/role/delete",
+            method: "get",
+            params: {
+              id: this.thisRowData.id,
+            },
+          })
+            .then((res) => {
+              this.selectRoleAll();
+              this.$message({
+                type: "success",
+                message: "删除成功!",
+              });
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
+    },
+
+    // 查询按钮
+    roleSelect() {
+      this.$axios({
+        url: "/role/findrole",
+        method: "post",
+        data: {
+          rolename: this.selectData.rolename,
+          rolenumber: this.selectData.rolenumber,
+        },
+      })
+        .then((res) => {
+          this.tableData = [];
+          for (let i = 0; i < res.data.date.length; i++) {
+            this.tableData.push(res.data.date[i]);
+          }
+          console.log(this.tableData);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     // 重置按钮
-    resetForm(formName) {
+    resetSelect(formName) {
       this.$refs[formName].resetFields();
+       this.selectRoleAll();
     },
 
     // 表格的单选多选
@@ -311,6 +510,9 @@ export default {
 
 
 <style lang="less" scoped>
+.el-breadcrumb {
+  padding: 20px;
+}
 .breads {
   width: 100%;
   height: 80px;
@@ -325,7 +527,7 @@ export default {
   width: 100%;
   height: 60px;
   //background: teal;
-  padding-top: 30px;
+
   border-top: gray;
 }
 //搜索
@@ -346,6 +548,12 @@ export default {
 .roleTable {
   padding: 20px;
 }
+
+// 删除按钮
+.tabDelBt {
+  color: #f56c6c !important ;
+}
+
 // 页码样式
 .rolePage {
   padding: 20px;

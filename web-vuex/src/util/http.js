@@ -7,5 +7,16 @@ const http=axios.create({
         "Content-Type":"application/json"
     }
 });
+//axios请求前的拦截
+http.interceptors.request.use(req=>{
+    //从session中获取token
+    let token = sessionStorage.getItem('token');
+    //如果有就在请求投中设置  req.headers['xxxx']=token   xxxx这个token的名字是后台定的。
+    token && (req.headers['token']=token);
+
+    return req;
+},error=>{
+    Promise.reject(error)
+});
 
 export default  http
