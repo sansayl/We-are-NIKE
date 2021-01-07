@@ -2,8 +2,11 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import http from '@/util/http.js'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+
+
 
 Vue.config.productionTip = false
 import axios from 'axios'
@@ -66,25 +69,33 @@ Vue.filter('status', function(val) {
   return val
 })
 
+// axios.defaults.baseURL = 'http://nike.th520.com/'
+// axios.interceptors.request.use(config => {
+//     // console.log(config);
+//     config.headers.token = window.sessionStorage.getItem('token');
+//     // 最后必须 return config
+//     return config
+// });
+
+// Vue.config.productionTip = false
 
 
 
-
-
-//添加请求拦截
-axios.interceptors.request.use(
-  config => {
-    config.headers = {
+// //添加请求拦截
+// axios.interceptors.request.use(
+//   config => {
+//     config.headers = {
       
-    }
-    console.log("我请求了");
-    return config;
-  },
-  error => {
-    return Promise.reject(error); // 固定写法
-  }
-)
+//     }
+//     console.log("我请求了");
+//     return config;
+//   },
+//   error => {
+//     return Promise.reject(error); // 固定写法
+//   }
+// )
 Vue.prototype.$axios=axios
+Vue.prototype.$axios=http
 
 Vue.use(ElementUI);
 new Vue({

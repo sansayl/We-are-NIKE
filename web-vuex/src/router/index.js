@@ -15,6 +15,7 @@ import WareHouse from '../views/WareHouse.vue'
 import Role from '../views/Role.vue'
 import StaffMang from '../views/StaffMang.vue'
 import WelCome from '../views/WelCome.vue'
+
 Vue.use(VueRouter)
 
 const routes = [

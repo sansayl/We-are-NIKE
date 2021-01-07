@@ -53,7 +53,7 @@
                     if (res.data.code==0){//
                         this.$router.push('/about/welcome');
                         this.$store.commit('toFlase')
-                        window.sessionStorage.setItem("token",res.data.date.token);
+                        sessionStorage.setItem('token',res.data.date.token);
                         window.sessionStorage.setItem("employee",res.data.date.employee);
                         window.sessionStorage.setItem("powerList",res.data.date.powerList);
                         this.msg=!this.msg;
