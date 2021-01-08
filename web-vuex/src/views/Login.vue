@@ -4,9 +4,10 @@
         <!--<button @click="app">点击</button>-->
 
             <div class="d1">
+                <h1 class="h1">We Are Nike</h1>
                 <div class="d1-1">
                     <el-form ref="form" :model="form" label-width="80px" class="y1">
-                        <el-form-item label="手机号:">
+                        <el-form-item label="手机号:" >
                             <el-input v-model="form.name"></el-input>
                         </el-form-item>
                         <el-form-item label="密码:">
@@ -77,7 +78,7 @@
     
         overflow: hidden;
     }
-
+    
     .d1{
         width: 500px;
         height: 400px;
@@ -86,7 +87,11 @@
         box-shadow: 1px 2px 12px -3px;
         margin: 200px auto;
     }
-
+    .h1{
+        margin: 30px auto;
+        text-align: center;
+        color: white;
+    }
     .el-form{
         margin-left: 50px;
     }
@@ -96,10 +101,10 @@
     }
 
     .d1-button{
-        margin-left: 200px;
+        margin-left: 220px;
     }
 
     .d1-1{
-        margin: 140px auto;
+        margin: 90 auto;
     }
 </style>
