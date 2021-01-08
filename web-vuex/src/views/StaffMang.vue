@@ -79,7 +79,7 @@
               <el-button @click="editVisible = true" type="text" size="small"
                 >编辑</el-button
               >
-              <el-button type="text" size="small" @click="setRoleVisible = true"
+              <el-button type="text" class="setrol" size="small" @click="setRoleVisible = true"
                 >设置角色</el-button
               >
               <el-button
@@ -413,9 +413,10 @@ export default {
         },
       })
         .then((res) => {
-          console.log(res, "员工数据");
+          // console.log(res, "员工数据");
           this.tableData = res.data.date; //获取表格数据
           this.tableTotal = res.data.count; //获取列表数据总数
+          this.selectStaffAll(); 
         })
         .catch((err) => {
           console.log(err);
@@ -450,11 +451,10 @@ export default {
       })
         .then((res) => {
           this.tableData = [];
-          console.log(res, 2222);
+          // console.log(res, 2222);
           for (let i = 0; i < res.data.date.length; i++) {
             this.tableData.push(res.data.date[i]);
           }
-
           // this.selectStaffAll();
         })
         .catch((err) => {
@@ -632,6 +632,16 @@ export default {
 
 
 <style lang="less"  scoped>
+
+// 按钮字体
+.el-button {
+  font-size: 14px;
+}
+//详情
+.setrol {
+  color: #E6A23C;
+}
+
 .el-breadcrumb {
   padding-bottom: 20px;
 }

@@ -2,8 +2,8 @@
   <div id="app">
 
     <div >
-      <Login class="l1" v-if="$store.state.islogin"></Login>
-      <router-view v-else></router-view>
+      <!-- <Login class="l1" v-if="$store.state.islogin"></Login> -->
+      <router-view></router-view>
     </div>
   </div>
 </template>
@@ -21,17 +21,15 @@
         }
       },
     components: {
-      // HelloWorld
       Login,
       Main
     },
     mounted(){
-      // console.log(window.location.href)
+
     }
 
   }
 
-// import About from "@/views/About.vue";
 
 
 </script>
@@ -44,14 +42,13 @@
   }
 #app{
   height: 100%;
- // background: url("assets/images/4.jpg")  no-repeat !important;
+  background: url("assets/images/4.jpg")  no-repeat !important;
   background-size: cover ;
   overflow: hidden;
 }
-  .l1{
-    margin: 200px 500px;
-
-  }
+  // .l1{
+  //   margin: 200px 500px;
+  // }
 </style>
 
 

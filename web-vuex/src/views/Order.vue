@@ -1,5 +1,13 @@
 <template>
   <div class="page1">
+    <!-- 面包屑导航区域 -->
+    <el-breadcrumb separator-class="el-icon-arrow-right">
+      <el-breadcrumb-item :to="{ path: '/about/welcome' }"
+        >首页</el-breadcrumb-item
+      >
+      <el-breadcrumb-item>订单管理</el-breadcrumb-item>
+      <el-breadcrumb-item>订单管理</el-breadcrumb-item>
+    </el-breadcrumb>
     <div class="orderSelect">
       <template>
         <el-form
@@ -15,25 +23,30 @@
             ></el-input>
           </el-form-item>
           <!--<el-form-item label="" prop="role">-->
-            <!--<el-select v-model="formInline.role" placeholder="角色">-->
-              <!--<el-option label="一般店员" value="一般店员"></el-option>-->
-              <!--<el-option label="仓库管理员" value="仓库管理员"></el-option>-->
-            <!--</el-select>-->
+          <!--<el-select v-model="formInline.role" placeholder="角色">-->
+          <!--<el-option label="一般店员" value="一般店员"></el-option>-->
+          <!--<el-option label="仓库管理员" value="仓库管理员"></el-option>-->
+          <!--</el-select>-->
           <!--</el-form-item>-->
           <!--<el-form-item label="" prop="tel">-->
-            <!--<el-input-->
-              <!--v-model="formInline.tel"-->
-              <!--placeholder="电话号码"-->
-            <!--&gt;</el-input>-->
+          <!--<el-input-->
+          <!--v-model="formInline.tel"-->
+          <!--placeholder="电话号码"-->
+          <!--&gt;</el-input>-->
           <!--</el-form-item>-->
           <el-form-item>
-            <el-button type="primary" @click="submitForm('formInline') ; chaxun()"
+            <el-button
+              type="primary"
+              @click="
+                submitForm('formInline');
+                chaxun();
+              "
               >查询</el-button
             >
             <el-button @click="resetForm('formInline')">重置</el-button>
             <!-- 删除事件自己写 -->
             <!--<el-button @click="deleteForm('formInline')" class="deleBt"-->
-              <!--&gt;删除</el-button-->
+            <!--&gt;删除</el-button-->
             <!--&gt;-->
           </el-form-item>
           <el-form-item> </el-form-item>
@@ -43,219 +56,271 @@
     <!--table表格-->
     <div class="liebiao">
       <template>
-      <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-        <el-tab-pane label="未支付" name="1" index="0">
-           <template >
-        <el-table
-          :data="tableData"
-          border
-          style="width: 100%"
-          @selection-change="handleSelectionChange"
-        >
-          <!--<el-table-column type="selection" width="40"> </el-table-column>-->
+        <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+          <el-tab-pane label="未支付" name="1" index="0">
+            <template>
+              <el-table
+                :data="tableData"
+                border
+                style="width: 100%"
+                @selection-change="handleSelectionChange"
+              >
+                <!--<el-table-column type="selection" width="40"> </el-table-column>-->
 
-          <el-table-column prop="id" label="商品编号" width="150">
-          </el-table-column>
+                <el-table-column prop="id" label="商品编号" width="150">
+                </el-table-column>
 
-          <el-table-column prop="name" label="商品名称" width="150">
-          </el-table-column>
+                <el-table-column prop="name" label="商品名称" width="150">
+                </el-table-column>
 
-          <el-table-column prop="num" label="商品数量" width="120">
-          </el-table-column>
+                <el-table-column prop="num" label="商品数量" width="120">
+                </el-table-column>
 
-          <el-table-column prop="price" label="商品价格" width="120">
-          </el-table-column>
+                <el-table-column prop="price" label="商品价格" width="120">
+                </el-table-column>
 
-          <el-table-column prop="buyer_name" label="买家名称" width="170">
-          </el-table-column>
+                <el-table-column prop="buyer_name" label="买家名称" width="170">
+                </el-table-column>
 
-          <el-table-column prop="order_status" label="订单状态" width="150">
-            <template slot-scope="scope">
-              <span v-if="scope.row.order_status == 0">未支付</span>
-              <span v-if="scope.row.order_status == 1">已支付</span>
-              <span v-if="scope.row.order_status == 2">待发货</span>
+                <el-table-column
+                  prop="order_status"
+                  label="订单状态"
+                  width="150"
+                >
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.order_status == 0">未支付</span>
+                    <span v-if="scope.row.order_status == 1">已支付</span>
+                    <span v-if="scope.row.order_status == 2">待发货</span>
+                  </template>
+                </el-table-column>
+
+                <el-table-column prop="order_time" label="下单时间" width="210">
+                </el-table-column>
+
+                <el-table-column
+                  fixed="right"
+                  label="操作"
+                  width="160"
+                  header-align="center"
+                >
+                  <template class="caozuo" slot-scope="scope">
+                    <el-button
+                      class="orderDetailBt"
+                      @click="
+                        dialogTableVisible = true;
+                        xiangqing(scope.row);
+                      "
+                      type="text"
+                      size="small"
+                      >详情</el-button
+                    >
+                    <el-button
+                      type="text"
+                      size="small"
+                      @click="
+                        centerDialogVisible = true;
+                        bianji(scope.row);
+                      "
+                      >编辑</el-button
+                    >
+                    <el-button
+                     class="statusbt"
+                      type="text"
+                      size="small"
+                      @click="
+                        zhuangtai = true;
+                        zhuangtai1(scope.row);
+                      "
+                      >状态</el-button
+                    >
+                    <!--<template>-->
+                    <!--<el-popconfirm title="确定删除吗？" class="tabDelBt" @click="w_queding">-->
+                    <!--<el-button type="text" size="small" slot="reference" @click="w_shanchu(scope.row)">删除</el-button>-->
+                    <!--</el-popconfirm>-->
+                    <!--</template>-->
+                  </template>
+                </el-table-column>
+              </el-table>
             </template>
-          </el-table-column>
+          </el-tab-pane>
+          <el-tab-pane label="已支付" name="2" index="1">
+            <template>
+              <el-table
+                :data="tableData"
+                border
+                style="width: 100%"
+                @selection-change="handleSelectionChange"
+              >
+                <!--<el-table-column type="selection" width="40"> </el-table-column>-->
 
-          <el-table-column prop="order_time" label="下单时间" width="210" >
-          </el-table-column>
+                <el-table-column prop="id" label="商品编号" width="150">
+                </el-table-column>
 
-          <el-table-column
-            fixed="right"
-            label="操作"
-            width="160"
-            header-align="center"
-          >
-            <template class="caozuo" slot-scope="scope">
-              <el-button class="orderDetailBt"
-                @click="dialogTableVisible = true ;xiangqing(scope.row)"
-                type="text"
-                size="small"
-                >详情</el-button
-              >
-              <el-button
-                type="text"
-                size="small"
-                @click="centerDialogVisible = true ; bianji(scope.row)"
-                >编辑</el-button
-              >
-              <el-button type="text" size="small" @click="zhuangtai = true ;zhuangtai1(scope.row)"
-                >状态</el-button
-              >
-              <!--<template>-->
-                <!--<el-popconfirm title="确定删除吗？" class="tabDelBt" @click="w_queding">-->
-                  <!--<el-button type="text" size="small" slot="reference" @click="w_shanchu(scope.row)">删除</el-button>-->
-                <!--</el-popconfirm>-->
-              <!--</template>-->
+                <el-table-column prop="name" label="商品名称" width="150">
+                </el-table-column>
+
+                <el-table-column prop="num" label="商品数量" width="120">
+                </el-table-column>
+
+                <el-table-column prop="price" label="商品价格" width="120">
+                </el-table-column>
+
+                <el-table-column prop="buyer_name" label="买家名称" width="170">
+                </el-table-column>
+
+                <el-table-column
+                  prop="order_status"
+                  label="订单状态"
+                  width="150"
+                >
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.order_status == 0">未支付</span>
+                    <span v-if="scope.row.order_status == 1">已支付</span>
+                    <span v-if="scope.row.order_status == 2">待发货</span>
+                  </template>
+
+                  <!--{{ scope.row.state | state }}-->
+                </el-table-column>
+
+                <el-table-column prop="order_time" label="下单时间" width="210">
+                </el-table-column>
+
+                <el-table-column
+                  fixed="right"
+                  label="操作"
+                  width="160"
+                  header-align="center"
+                >
+                  <template class="caozuo" slot-scope="scope">
+                    <el-button
+                      class="orderDetailBt"
+                      @click="
+                        dialogTableVisible = true;
+                        xiangqing(scope.row);
+                      "
+                      type="text"
+                      size="small"
+                      >详情</el-button
+                    >
+                    <el-button
+                      type="text"
+                      size="small"
+                      @click="
+                        centerDialogVisible = true;
+                        bianji(scope.row);
+                      "
+                      >编辑</el-button
+                    >
+                    <el-button
+                     class="statusbt"
+                     type="text"
+                      size="small"
+                      @click="
+                        zhuangtai = true;
+                        zhuangtai1(scope.row);
+                      "
+                      >状态</el-button
+                    >
+                    <!--<template>-->
+                    <!--<el-popconfirm title="确定删除吗？" class="tabDelBt" @click="w_queding">-->
+                    <!--<el-button type="text" size="small" slot="reference" @click="w_shanchu(scope.row)">删除</el-button>-->
+                    <!--</el-popconfirm>-->
+                    <!--</template>-->
+                  </template>
+                </el-table-column>
+              </el-table>
             </template>
-          </el-table-column>
-        </el-table>
-          </template>
-        </el-tab-pane>
-        <el-tab-pane label="已支付" name="2" index="1">
-          <template >
-            <el-table
-                    :data="tableData"
-                    border
-                    style="width: 100%"
-                    @selection-change="handleSelectionChange"
-            >
-              <!--<el-table-column type="selection" width="40"> </el-table-column>-->
-
-              <el-table-column prop="id" label="商品编号" width="150">
-              </el-table-column>
-
-              <el-table-column prop="name" label="商品名称" width="150">
-              </el-table-column>
-
-              <el-table-column prop="num" label="商品数量" width="120">
-              </el-table-column>
-
-              <el-table-column prop="price" label="商品价格" width="120">
-              </el-table-column>
-
-              <el-table-column prop="buyer_name" label="买家名称" width="170">
-              </el-table-column>
-
-              <el-table-column prop="order_status" label="订单状态" width="150">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.order_status == 0">未支付</span>
-                  <span v-if="scope.row.order_status == 1">已支付</span>
-                  <span v-if="scope.row.order_status == 2">待发货</span>
-                </template>
-
-                <!--{{ scope.row.state | state }}-->
-              </el-table-column>
-
-              <el-table-column prop="order_time" label="下单时间" width="210">
-              </el-table-column>
-
-              <el-table-column
-                      fixed="right"
-                      label="操作"
-                      width="160"
-                      header-align="center"
+          </el-tab-pane>
+          <el-tab-pane label="待发货" name="3" index="2">
+            <template>
+              <el-table
+                :data="tableData"
+                border
+                style="width: 100%"
+                @selection-change="handleSelectionChange"
               >
-                <template class="caozuo" slot-scope="scope">
-                  <el-button class="orderDetailBt"
-                             @click="dialogTableVisible = true ;xiangqing(scope.row)"
-                             type="text"
-                             size="small"
-                  >详情</el-button
-                  >
-                  <el-button
-                          type="text"
-                          size="small"
-                          @click="centerDialogVisible = true ; bianji(scope.row)"
-                  >编辑</el-button
-                  >
-                  <el-button type="text" size="small" @click="zhuangtai = true ;zhuangtai1(scope.row)"
-                  >状态</el-button
-                  >
-                  <!--<template>-->
-                  <!--<el-popconfirm title="确定删除吗？" class="tabDelBt" @click="w_queding">-->
-                  <!--<el-button type="text" size="small" slot="reference" @click="w_shanchu(scope.row)">删除</el-button>-->
-                  <!--</el-popconfirm>-->
-                  <!--</template>-->
-                </template>
-              </el-table-column>
-            </el-table>
-          </template>
-        </el-tab-pane>
-        <el-tab-pane label="待发货" name="3" index="2">
-          <template >
-            <el-table
-                    :data="tableData"
-                    border
-                    style="width: 100%"
-                    @selection-change="handleSelectionChange"
-            >
-              <!--<el-table-column type="selection" width="40"> </el-table-column>-->
+                <!--<el-table-column type="selection" width="40"> </el-table-column>-->
 
-              <el-table-column prop="id" label="商品编号" width="150">
-              </el-table-column>
+                <el-table-column prop="id" label="商品编号" width="150">
+                </el-table-column>
 
-              <el-table-column prop="name" label="商品名称" width="150">
-              </el-table-column>
+                <el-table-column prop="name" label="商品名称" width="150">
+                </el-table-column>
 
-              <el-table-column prop="num" label="商品数量" width="120">
-              </el-table-column>
+                <el-table-column prop="num" label="商品数量" width="120">
+                </el-table-column>
 
-              <el-table-column prop="price" label="商品价格" width="120">
-              </el-table-column>
+                <el-table-column prop="price" label="商品价格" width="120">
+                </el-table-column>
 
-              <el-table-column prop="buyer_name" label="买家名称" width="170">
-              </el-table-column>
+                <el-table-column prop="buyer_name" label="买家名称" width="170">
+                </el-table-column>
 
-              <el-table-column prop="order_status" label="订单状态" width="150">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.order_status == 0">未支付</span>
-                  <span v-if="scope.row.order_status == 1">已支付</span>
-                  <span v-if="scope.row.order_status == 2">待发货</span>
-                </template>
+                <el-table-column
+                  prop="order_status"
+                  label="订单状态"
+                  width="150"
+                >
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.order_status == 0">未支付</span>
+                    <span v-if="scope.row.order_status == 1">已支付</span>
+                    <span v-if="scope.row.order_status == 2">待发货</span>
+                  </template>
 
-                <!--{{ scope.row.state | state }}-->
-              </el-table-column>
+                  <!--{{ scope.row.state | state }}-->
+                </el-table-column>
 
-              <el-table-column prop="order_time" label="下单时间" width="210">
-              </el-table-column>
+                <el-table-column prop="order_time" label="下单时间" width="210">
+                </el-table-column>
 
-              <el-table-column
-                      fixed="right"
-                      label="操作"
-                      width="160"
-                      header-align="center"
-              >
-                <template class="caozuo" slot-scope="scope">
-                  <el-button class="orderDetailBt"
-                             @click="dialogTableVisible = true ;xiangqing(scope.row)"
-                             type="text"
-                             size="small"
-                  >详情</el-button
-                  >
-                  <el-button
-                          type="text"
-                          size="small"
-                          @click="centerDialogVisible = true ; bianji(scope.row)"
-                  >编辑</el-button
-                  >
-                  <el-button type="text" size="small" @click="zhuangtai = true ;zhuangtai1(scope.row)"
-                  >状态</el-button
-                  >
-                  <!--<template>-->
-                  <!--<el-popconfirm title="确定删除吗？" class="tabDelBt" @click="w_queding">-->
-                  <!--<el-button type="text" size="small" slot="reference" @click="w_shanchu(scope.row)">删除</el-button>-->
-                  <!--</el-popconfirm>-->
-                  <!--</template>-->
-                </template>
-              </el-table-column>
-            </el-table>
-          </template>
-        </el-tab-pane>
-
-      </el-tabs>
-    </template>
-     
+                <el-table-column
+                  fixed="right"
+                  label="操作"
+                  width="160"
+                  header-align="center"
+                >
+                  <template class="caozuo" slot-scope="scope">
+                    <el-button
+                      class="orderDetailBt"
+                      @click="
+                        dialogTableVisible = true;
+                        xiangqing(scope.row);
+                      "
+                      type="text"
+                      size="small"
+                      >详情</el-button
+                    >
+                    <el-button
+                      type="text"
+                      size="small"
+                      @click="
+                        centerDialogVisible = true;
+                        bianji(scope.row);
+                      "
+                      >编辑</el-button
+                    >
+                    <el-button
+                    class="statusbt"
+                     type="text"
+                      size="small"
+                      @click="
+                        zhuangtai = true;
+                        zhuangtai1(scope.row);
+                      "
+                      >状态</el-button
+                    >
+                    <!--<template>-->
+                    <!--<el-popconfirm title="确定删除吗？" class="tabDelBt" @click="w_queding">-->
+                    <!--<el-button type="text" size="small" slot="reference" @click="w_shanchu(scope.row)">删除</el-button>-->
+                    <!--</el-popconfirm>-->
+                    <!--</template>-->
+                  </template>
+                </el-table-column>
+              </el-table>
+            </template>
+          </el-tab-pane>
+        </el-tabs>
+      </template>
     </div>
 
     <!--分页-->
@@ -321,9 +386,9 @@
             width="100"
           ></el-table-column>
           <!--<el-table-column-->
-            <!--property=""-->
-            <!--label="发货地址"-->
-            <!--width="150"-->
+          <!--property=""-->
+          <!--label="发货地址"-->
+          <!--width="150"-->
           <!--&gt;</el-table-column>-->
           <el-table-column
             property="address"
@@ -335,10 +400,7 @@
             label="下单时间"
             width="150"
           ></el-table-column>
-          <el-table-column
-            property="order_status"
-            label="订单状态"
-          >
+          <el-table-column property="order_status" label="订单状态">
             <template slot-scope="scope">
               <span v-if="scope.row.order_status == 0">未支付</span>
               <span v-if="scope.row.order_status == 1">已支付</span>
@@ -380,7 +442,8 @@
           <el-form
             :label-position="labelPosition"
             label-width="80px"
-            :model="formLabelAlign">
+            :model="formLabelAlign"
+          >
             <el-form-item label="买家名称">
               <el-input v-model="formLabelAlign.name"></el-input>
             </el-form-item>
@@ -395,9 +458,7 @@
 
         <span slot="footer" class="dialog-footer">
           <el-button @click="centerDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="b_queding"
-            >确 定</el-button
-          >
+          <el-button type="primary" @click="b_queding">确 定</el-button>
           <!--这个确认按钮要重写-->
         </span>
       </el-dialog>
@@ -437,7 +498,14 @@
         </span>
         <span slot="footer" class="dialog-footer">
           <el-button @click="zhuangtai = false">取 消</el-button>
-          <el-button type="primary" @click="zhuangtai = false;z_queding()">确 定</el-button>
+          <el-button
+            type="primary"
+            @click="
+              zhuangtai = false;
+              z_queding();
+            "
+            >确 定</el-button
+          >
         </span>
       </el-dialog>
     </div>
@@ -503,27 +571,29 @@
 // 删除按钮
 .deleBt {
   background: #f56c6c !important;
-  color:white
+  color: white;
 }
 // 详情按钮
-.orderDetailBt{
-  color:#67C23A
+.orderDetailBt {
+  color: #67c23a;
 }
 // 删除按钮
-.tabDelBt{
-  margin-left:5px ;
-
+.tabDelBt {
+  margin-left: 5px;
 }
-.tabDelBt .el-button{
-  color:#f56c6c !important ;
+.tabDelBt .el-button {
+  color: #f56c6c !important ;
 }
 // tab选项框
-.el-tabs__nav{
+.el-tabs__nav {
   background: white !important;
 }
 // 按钮字体
-.el-button{
+.el-button {
   font-size: 14px;
+}
+.statusbt{
+  color: #E6A23C;
 }
 </style>
 
@@ -533,19 +603,18 @@ export default {
   data() {
     return {
       //页面进来就渲染
-      jiazai:{
-        pageSize:'',
-        startIndex:'',
-        state:'0'
+      jiazai: {
+        pageSize: "",
+        startIndex: "",
+        state: "0",
       },
 
       //新建一个编辑字段的数据数组
-      bianji_data:[],
+      bianji_data: [],
 
       //点击详情的数组
-      yemian_data:[
-      ],
-      xiangqing_data:[],
+      yemian_data: [],
+      xiangqing_data: [],
       //  详情页
       tableData: [
         // {
@@ -584,7 +653,6 @@ export default {
       xin: false,
 
       //    编辑
-
 
       centerDialogVisible: false,
       labelPosition: "right",
@@ -627,66 +695,60 @@ export default {
         tel: "",
       },
 
-
       // //    分页
       currentPage1: 1,
       // currentPage2: 5,
       // currentPage3: 5,
       // currentPage4: 4,
 
-
-
       // tab选项卡
-      activeName: '1',
+      activeName: "1",
       page: 1,
       pageSize: 15,
 
       //存放仓库数据
-      houseData:{
+      houseData: {},
 
-      },
-
-    //  //状态的值
-      z_id:'',
-    //  删除的id
-      s_id:''
+      //  //状态的值
+      z_id: "",
+      //  删除的id
+      s_id: "",
     };
   },
   components: {},
   // 弹框
   methods: {
-    getHouse(){
+    getHouse() {
       this.$axios({
-        url:'/repository/list',
-        method:'post',
-        data:{
+        url: "/repository/list",
+        method: "post",
+        data: {
           page: 1,
           pageSize: 15,
-        }
-      }).then((res)=>{
-        console.log(res.data.date,'仓库')
-        this.houseData=res.data.date;
-        console.log(this.houseData,'仓库')
-
-      }).catch((err)=>{
-        console.log(err)
-      });
+        },
+      })
+        .then((res) => {
+          this.houseData = res.data.date;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
 
     //页面一刷新
-    yemian(){
+    yemian() {
       this.$axios({
-        url:'/orders/list',
-        method:'post',
-        data:this.jiazai
-      }).then((res)=>{
-        console.log(11111,res);
-        this.tableData=res.data.date
-      }).catch((err)=>{
-        console.log(err)
-      });
+        url: "/orders/list",
+        method: "post",
+        data: this.jiazai,
+      })
+        .then((res) => {
+          this.tableData = res.data.date;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
-
 
     //状态是否关闭
     handleClose(done) {
@@ -705,12 +767,12 @@ export default {
     // 重置
     resetForm(formName) {
       this.$refs[formName].resetFields();
-      this.yemian()
+      this.yemian();
     },
 
     // 查看/上面导航 未支付
     handleClick(row) {
-      console.log(1,row);
+      console.log(1, row);
     },
 
     //删除
@@ -718,9 +780,7 @@ export default {
       console.log("这是删除事件");
     },
     //查询
-    submitForm(){
-
-    },
+    submitForm() {},
     // submitForm(formName) {
     //   this.$refs[formName].validate((valid) => {
     //     if (valid) {
@@ -734,14 +794,13 @@ export default {
     //    分页
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
-      this.jiazai.startIndex=val;
-      this.yemian()
+      this.jiazai.startIndex = val;
+      this.yemian();
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
-      this.jiazai.pageSize=val;
+      this.jiazai.pageSize = val;
       this.yemian();
-
     },
 
     // 表格的单选多选
@@ -759,186 +818,181 @@ export default {
     },
 
     // tab选项
-     handleClick(tab, event) {
-      this.jiazai.state=tab.index;
-        console.log(tab.name, event);
-        this.yemian()
-       console.log(34567899,this.jiazai.state)
-      },
-
-
-     //查询
-
-    chaxun(){
-      if (this.formInline.user==''){
-        alert('不能为空');
-        return
-      }else{
-        this.$axios({
-          url:'/orders/findItemByName',
-          method:'post',
-          params:{
-            buyerName:this.formInline.user
-          }
-        }).then((res)=>{
-          console.log('查询的',res)
-
-          this.tableData=[];
-          console.log(res,222);
-          for(let i=0;i<res.data.date.length;i++){
-            this.tableData.push(res.data.date[i])
-          }
-
-        }).catch((err)=>{
-          console.log(err)
-        })
-      }
-
+    handleClick(tab, event) {
+      this.jiazai.state = tab.index;
+      console.log(tab.name, event);
+      this.yemian();
+      console.log(34567899, this.jiazai.state);
     },
 
-     //详情
-    xiangqing(row){
-    // console.log(row.Serial);
+    //查询
+
+    chaxun() {
+      if (this.formInline.user == "") {
+        alert("不能为空");
+        return;
+      } else {
+        this.$axios({
+          url: "/orders/findItemByName",
+          method: "post",
+          params: {
+            buyerName: this.formInline.user,
+          },
+        })
+          .then((res) => {
+            this.tableData = [];
+
+            for (let i = 0; i < res.data.date.length; i++) {
+              this.tableData.push(res.data.date[i]);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    },
+
+    //详情
+    xiangqing(row) {
+      // console.log(row.Serial);
       // return this.xiangqing_data.push(row),
       this.$axios({
-          url:`/orders/${row.id}`,
-          params:{
-              // id:123
-          }
-      }).then((res)=>{
-        console.log(res);
-        this.yemian_data=[];
-        this.yemian_data.push(res.data.date[0]);
-        console.log(10254,res.data.date);
-        // return this.yemian_data
-        // row.o_number=res.data.date.id;
-        // row.data=res.data.date.orderTime;
-        // row.o_status=res.data.date.orderStatus;
-        // row.freight=res.data.date.freight;
-        // row.Serial=res.data.date.commodityNumber;
-        // row.o_status=res.data.date.buyerNumber;
-        // return this.xiangqing_data.push(res.data.date)
-      }).catch((err)=>{
-        console.log(err)
-      });
+        url: `/orders/${row.id}`,
+        params: {
+          // id:123
+        },
+      })
+        .then((res) => {
+          this.yemian_data = [];
+          this.yemian_data.push(res.data.date[0]);
 
-
+          // return this.yemian_data
+          // row.o_number=res.data.date.id;
+          // row.data=res.data.date.orderTime;
+          // row.o_status=res.data.date.orderStatus;
+          // row.freight=res.data.date.freight;
+          // row.Serial=res.data.date.commodityNumber;
+          // row.o_status=res.data.date.buyerNumber;
+          // return this.xiangqing_data.push(res.data.date)
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
 
-
     //编辑
-    bianji(row){
-      this.bianji_data=[];
-      console.log(99999,row.id);
+    bianji(row) {
+      this.bianji_data = [];
+      console.log(99999, row.id);
       this.$axios({
-        url:`/orders/${row.id}`,
-        params:{
+        url: `/orders/${row.id}`,
+        params: {},
+      })
+        .then((res) => {
+          this.bianji_data = res.data.date;
 
-        }
-      }).then((res)=>{
-        console.log(999999,res);
-        this.bianji_data=res.data.date;
-
-        // return this.z_id=res.data.date.id;
-      }).catch((err)=>{
-        console.log(err)
-      });
-      return this.z_id=row.id;
+          // return this.z_id=res.data.date.id;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      return (this.z_id = row.id);
       // console.log(5555,this.z_id);
     },
 
-
-
-     // 编辑确定发送接口的代码
-    b_queding(){
-      if (this.formLabelAlign.name=='' && this.formLabelAlign.region=='' && this.formLabelAlign.type==''){
-        alert('不能为空')
-        return
-      } else{
-        this.centerDialogVisible=!this.centerDialogVisible;
-        console.log(this.formLabelAlign.name);
-        console.log(this.formLabelAlign.region);
-        console.log(this.formLabelAlign.type);
+    // 编辑确定发送接口的代码
+    b_queding() {
+      if (
+        this.formLabelAlign.name == "" &&
+        this.formLabelAlign.region == "" &&
+        this.formLabelAlign.type == ""
+      ) {
+        alert("不能为空");
+        return;
+      } else {
+        this.centerDialogVisible = !this.centerDialogVisible;
+        // console.log(this.formLabelAlign.name);
+        // console.log(this.formLabelAlign.region);
+        // console.log(this.formLabelAlign.type);
 
         this.$axios({
-          url:'orders/updateByName',
-          method:'post',
-          params:{
-            id:this.z_id,//点击编辑的时候拿到的
-            buyerName:this.formLabelAlign.name,
-            phone:this.formLabelAlign.region,
-            address:this.formLabelAlign.type,
-          }
-        }).then((res)=>{
-          console.log('编辑确定',res);
-          this.yemian()
-        }).catch((err)=>{
-          console.log(err)
+          url: "orders/updateByName",
+          method: "post",
+          params: {
+            id: this.z_id, //点击编辑的时候拿到的
+            buyerName: this.formLabelAlign.name,
+            phone: this.formLabelAlign.region,
+            address: this.formLabelAlign.type,
+          },
         })
-        ;
+          .then((res) => {
+            console.log("编辑确定", res);
+            this.yemian();
+          })
+          .catch((err) => {
+            console.log(err);
+          });
         //编辑里面的修改
-        this.formLabelAlign.name='';
-        this.formLabelAlign.region='';
-        this.formLabelAlign.type=''
+        this.formLabelAlign.name = "";
+        this.formLabelAlign.region = "";
+        this.formLabelAlign.type = "";
       }
-
     },
-
-
 
     //状态
-    zhuangtai1(row){
+    zhuangtai1(row) {
       console.log(row.id);
-      this.z_id=row.id
+      this.z_id = row.id;
     },
 
-    z_queding(){
-      console.log(1,this.z_id);
-      console.log(2,this.value);
-      console.log(3,this.value1)  ;//这个是选择仓库的id
+    z_queding() {
+      console.log(1, this.z_id);
+      console.log(2, this.value);
+      console.log(3, this.value1); //这个是选择仓库的id
       this.$axios({
-        url:'/orders/updateOrderStatus',
-        method:'post',
-        params:{
-            id:this.z_id,
-            state:this.value
-        }
-      }).then((res)=>{
-        console.log(66666,this.value,res);
-        this.tableData.state=this.value;
-        this.yemian()
-      }).catch((err)=>{
-        console.log(err)
-      });
+        url: "/orders/updateOrderStatus",
+        method: "post",
+        params: {
+          id: this.z_id,
+          state: this.value,
+        },
+      })
+        .then((res) => {
+          console.log(66666, this.value, res);
+          this.tableData.state = this.value;
+          this.yemian();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
 
-  //  删除
-  //   w_shanchu(row){
-  //     console.log(row);
-  //     this.s_id=row.Serial
-  //   },
-  //   w_queding(){
-  //     // this.$axios({
-  //     //   url:'/',
-  //     //   data:{
-  //     //
-  //     //   },
-  //     // }).then((res)=>{
-  //     //   console.log(res)
-  //     // }).catch((err)=>{
-  //     //   console.log(err)
-  //     // })
-  //     // alert(1);
-  //     console.log(this.s_id)
-  //   }
-
+    //  删除
+    //   w_shanchu(row){
+    //     console.log(row);
+    //     this.s_id=row.Serial
+    //   },
+    //   w_queding(){
+    //     // this.$axios({
+    //     //   url:'/',
+    //     //   data:{
+    //     //
+    //     //   },
+    //     // }).then((res)=>{
+    //     //   console.log(res)
+    //     // }).catch((err)=>{
+    //     //   console.log(err)
+    //     // })
+    //     // alert(1);
+    //     console.log(this.s_id)
+    //   }
   },
   //挂载后
   mounted() {
     //仓库
     this.getHouse();
     //详情
-   this.yemian();
+    this.yemian();
     //分页
     // this.$axios({
     //   url:'orders/list',
@@ -949,7 +1003,6 @@ export default {
     // }).catch((err)=>{
     //   console.log(1,err)
     // });
-
-  }
+  },
 };
 </script>

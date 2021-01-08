@@ -2,7 +2,7 @@
   <div class="wareHouse">
     <!-- 面包屑导航区域 -->
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/about/fenlei' }"
+      <el-breadcrumb-item :to="{ path: '/about/welcome' }"
         >首页</el-breadcrumb-item
       >
       <el-breadcrumb-item>仓库管理</el-breadcrumb-item>
@@ -38,9 +38,6 @@
               :label="item.name"
               :value="item.phone"
             ></el-option>
-          </el-select>
-            <el-option label="仓库管理员1" value="shanghai"></el-option>
-            <el-option label="仓库管理员2" value="beijing"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -82,8 +79,8 @@
             <el-button @click="editVisible = true" type="text" size="small"
               >编辑</el-button
             >
-            <el-button type="text" size="small" @click="detailVisible = true"
-              >查看</el-button
+            <el-button  class="SDetailBt" type="text" size="small" @click="detailVisible = true"
+              >详情</el-button
             >
             <el-button
               type="text"
@@ -223,11 +220,7 @@
     </el-dialog>
   </div>
 </template>
-<style lang="less" scoped>
-.wareHouse {
-  padding: 20px;
-}
-</style>
+
 <script>
 export default {
   name: "warehouse",
@@ -356,7 +349,7 @@ export default {
           this.tableData = res.data.date;
           this.tableTotal = res.data.count;
 
-          console.log(res, 223);
+          // console.log(res, 223);
           // this.tableData=res.data
           // this.tableTotal=res.data
         })
@@ -394,14 +387,14 @@ export default {
           this.houseStaff = res.data.date;
           let newsetroledata = [];
           this.houseStaff.forEach((v, i) => {
-            console.log(v, i, "查询员工名称与员工电话号码");
+            // console.log(v, i, "查询员工名称与员工电话号码");
             newsetroledata.push({
               name: v.name,
               phone: v.phone,
             });
           });
           this.houseStaff = newsetroledata;
-          console.log(this.houseStaff, "sfsdfsdf");
+          // console.log(this.houseStaff, "sfsdfsdf");
         })
         .catch((err) => {
           alert(err);
@@ -532,6 +525,14 @@ export default {
 </script>
 
 <style lang="less" scoped>
+// 按钮字体
+.el-button {
+  font-size: 14px;
+}
+//详情
+.SDetailBt {
+  color: #67c23a;
+}
 .wareHouse {
   padding: 20px;
 }

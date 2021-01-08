@@ -2,18 +2,18 @@
   <div class="home">
     <div class="headImg">
       <div class="demo-image">
-            <div class="block" v-for="fit in fits" :key="fit">
-              <el-image
-                style="width: 100px; height: 100px"
-                :src="url"
-                :fit="fit"
-              ></el-image>
-            </div>
-          </div>
-      <p>你好:{{Login_employee}}欢迎回来</p>
+        <div class="block" v-for="fit in fits" :key="fit">
+          <el-image
+            style="width: 100px; height: 100px"
+            :src="url"
+            :fit="fit"
+          ></el-image>
+        </div>
+      </div>
+      <p>你好:{{ Login_employee }}欢迎回来</p>
     </div>
-    <el-row class="tac"  >
-      <el-col :span="24" >
+    <el-row class="tac">
+      <el-col :span="24">
         <el-menu
           default-active="2"
           class="el-menu-demo"
@@ -23,7 +23,28 @@
           text-color="#fff"
           active-text-color="#ffd04b"
         >
-          <el-submenu index="1">
+          <el-submenu
+            :index="index + ''"
+            v-for="(menu, index) in menuList"
+            :key="index"
+          >
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span>{{ menu.powername }}</span>
+            </template>
+            <el-menu-item-group>
+              <el-menu-item
+                :index="index + '-' + menuIndex"
+                v-for="(menuItem, menuIndex) in menu.children"
+                :key="menuIndex"
+              >
+                <router-link :to="'/about'+ menuItem.powerurl">{{
+                  menuItem.powername
+                }}</router-link>
+              </el-menu-item>
+            </el-menu-item-group>
+          </el-submenu>
+          <!-- <el-submenu index="1">
             <template slot="title">
               <i class="el-icon-location"></i>
               <span>商品管理</span>
@@ -79,8 +100,6 @@
               <el-menu-item index="4-1">
                  <router-link to="/about/warehouse">仓库管理</router-link>
               </el-menu-item>
-              <!-- <el-menu-item index="1-2">选项2</el-menu-item>
-              <el-menu-item index="1-3">选项3</el-menu-item> -->
             </el-menu-item-group>
           </el-submenu>
           <el-submenu index="5">
@@ -95,12 +114,10 @@
               <el-menu-item index="5-2">
                 <router-link to="/about/staffmang">员工管理</router-link>
               </el-menu-item>
-              <!-- <el-menu-item index="1-3">选项3</el-menu-item> -->
             </el-menu-item-group>
-          </el-submenu>
+          </el-submenu> -->
         </el-menu>
       </el-col>
-      
     </el-row>
   </div>
 </template>
@@ -113,18 +130,35 @@ export default {
   },
   data() {
     return {
-      Login_employee:'',
+      Login_employee: "",
       isCollapse: true,
-        fits: ['fill'],
-        url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
+      fits: ["fill"],
+      url:
+        "https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg",
     };
   },
-  mounted(){
-        this.Login_employee=window.sessionStorage.getItem("employee");
+  computed: {
+    //菜单数据
+    menuList: function () {
+      return this.$store.getters.menuList.filter(item => {
+        return item.children.length > 0;
+      });
+    },
+  },
+  mounted() {
+    this.Login_employee = window.sessionStorage.getItem("employee");
+
+    //获取菜单
+
+    let powerData = window.sessionStorage.getItem("powerList");
+
+    if (powerData) {
+      this.$store.commit("setPower", JSON.parse(powerData));
+    }
   },
   methods: {
     handleOpen(key, keyPath) {
-      console.log(key, keyPath);
+      // console.log(key, keyPath);
     },
     handleClose(key, keyPath) {
       console.log(key, keyPath);
@@ -134,10 +168,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
-html{
+html {
   height: 100%;
 }
-body{
+body {
   height: 100%;
 }
 //左侧菜单栏宽度
@@ -146,17 +180,17 @@ body{
   height: 735px;
 }
 //登录用户头像
-.headImg{
+.headImg {
   width: 150px;
   height: 150px;
   margin: 0 auto;
 }
-.imghead{
+.imghead {
   width: 140px;
   height: 120px;
-  border:1px solid
+  border: 1px solid;
 }
-.headImg p{
+.headImg p {
   height: 30px;
   margin-top: 0;
   color: white;
@@ -164,23 +198,22 @@ body{
   font-size: 12px;
   line-height: 30px;
 }
-.demo-image{
+.demo-image {
   margin-top: 20px;
 }
-span{
+span {
   font-size: 14px;
   font-weight: 100px;
 }
 
-
 //左侧菜单栏颜色样式
-.router-link-active {     
+.router-link-active {
   text-decoration: none;
   color: teal;
 }
- a {
-  text-decoration: none; 
+a {
+  text-decoration: none;
   color: #fff;
   font-size: 14px;
- }
+}
 </style>

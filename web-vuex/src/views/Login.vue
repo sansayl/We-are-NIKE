@@ -35,12 +35,7 @@
             }
         },
         methods:{
-            app(){
-                    console.log(this.form.name);
-                    console.log(this.form.pass);
-                    // this.msg=!this.msg;
-                    // this.$router.push('/main');
-                    
+            app(){    
                 this.$axios({
                     url:'/login/login',
                     method:'post',
@@ -49,7 +44,7 @@
                     phone: this.form.name,
                     }
                 }).then((res)=>{
-                    console.log(res);
+                   
                     if (res.data.code==0){//
                         this.$router.push('/about/welcome');
                         this.$store.commit('toFlase')
@@ -79,16 +74,17 @@
         padding: 0;
         width:100%;
         height: 100%;
-        background: #00bfbf !important;
+    
         overflow: hidden;
     }
 
     .d1{
         width: 500px;
         height: 400px;
-        background: rgba(248, 255, 220,.8);
+        background:#333;
         overflow: hidden;
         box-shadow: 1px 2px 12px -3px;
+        margin: 200px auto;
     }
 
     .el-form{

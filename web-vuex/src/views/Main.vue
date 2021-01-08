@@ -107,13 +107,13 @@
                     }
                 }).then((res)=>{
                     console.log(res)
-                    //this.$router.push('/');
-                    this.$store.commit('toTrue')
+                       this.$router.push('/login')
+                    // this.$store.commit('/login')
                     window.sessionStorage.clear();//清除存储
                 }).catch((err)=>{
                     console.log(err)
                 });
-                window.location.reload();//刷新
+                // window.location.reload();//刷新
                 
                 // console.log(this.Login_employee);
                 // console.log(this.Login_token)

@@ -75,7 +75,7 @@
               <el-button @click="editVisible = true" type="text" size="small"
                 >编辑</el-button
               >
-              <el-button @click="setRole()" type="text" size="small"
+              <el-button @click="setRole()" type="text" size="small" class="SDetailBt"
                 >设置权限</el-button
               >
               <el-button
@@ -305,6 +305,7 @@ export default {
               //console.log(res);
               alert("新增成功");
               this.addVisible = false;
+              this.selectRoleAll();
             })
             .catch((err) => {
               alert(err);
@@ -322,7 +323,7 @@ export default {
         method: "get",
       })
         .then((res) => {
-          console.log(res,'所有角色数据');
+          //console.log(res,'所有角色数据');
           this.tableData = res.data.date; //获取表格数据
           this.tableTotal = Number(res.count); //获取列表数据总数
         })
@@ -334,7 +335,7 @@ export default {
     getDataClick(val) {
       // val.isuse = val.isuse.toString();
       this.thisRowData = val;
-      console.log(val, "当前行");
+     // console.log(val, "当前行");
     },
     //编辑
     editRoleData() {
@@ -357,7 +358,7 @@ export default {
         method: "get",
       })
         .then((res) => {
-          //console.log(res, "权限树");
+         // console.log(res, "权限树");
           if (res.data) {
             this.dataTree.splice(0, this.dataTree.length);
             for (let key in res.data.date) {
@@ -395,10 +396,10 @@ export default {
          
        
           this.choosedatatree = res.data.date;
-          console.log(this.thisRowData.id, "当前行的id");
-          console.log(res.data.date,'返回的值')
-          console.log(this.choosedatatree, "当前角色拥有的权限");
-          console.log(this.choosedatatree, "遍历后的数组");
+          // console.log(this.thisRowData.id, "当前行的id");
+          // console.log(res.data.date,'返回的值')
+          // console.log(this.choosedatatree, "当前角色拥有的权限");
+          // console.log(this.choosedatatree, "遍历后的数组");
         })
         .catch((err) => {
           console.log(err);
@@ -561,5 +562,13 @@ export default {
 // 新增页面
 .el-form-item {
   margin-bottom: 20px !important;
+}
+// 按钮字体
+.el-button {
+  font-size: 14px;
+}
+//详情
+.SDetailBt {
+  color: #67c23a;
 }
 </style>

@@ -20,6 +20,10 @@ Vue.use(VueRouter)
 
 const routes = [
   {
+    path:'/',
+    redirect:'/login'
+  },
+  {
     path: '/login',
     name: 'Login',
     component: Login
@@ -50,17 +54,17 @@ const routes = [
           },
 
           {
-            path: 'fenlei',
+            path: 'goodsType',
             name: 'FenLei',
             component: FenLei
           },
           {
-            path: 'size',
+            path: 'goodsTypeSize',
             name: 'Size',
             component: Size
           },
           {
-            path: 'goods',
+            path: 'commodity',
             name: 'Goods',
             component: Goods
           },
@@ -70,17 +74,17 @@ const routes = [
             component: Select
           },
           {
-            path: 'order',
+            path: 'orders',
             name: 'Order',
             component: Order
           },
           {
-            path: 'sendgoods',
+            path: 'delivery',
             name: 'SendGoods',
             component: SendGoods
           },
           {
-            path: 'warehouse',
+            path: 'repository',
             name: 'WareHouse',
             component: WareHouse
           },
@@ -90,7 +94,7 @@ const routes = [
             component: Role
           },
           {
-            path: 'staffmang',
+            path: 'employee',
             name: 'StaffMang',
             component: StaffMang
           },

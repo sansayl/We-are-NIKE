@@ -3,8 +3,8 @@
 <template>
 <div class="page1">
   <el-tabs v-model="activeName" @tab-click="handleClick">
-    <el-tab-pane label="欢迎!!!" name="first">欢迎!!!</el-tab-pane>
-    <el-tab-pane label="商品统计" name="second">
+    <!--<el-tab-pane label="欢迎!!!" name="first">欢迎!!!</el-tab-pane>-->
+    <el-tab-pane label="商品统计" name="first">
         <!-- 商品统计 -->
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
             <el-form-item label="商品名称" prop="name">
@@ -30,7 +30,7 @@
       </div>
     </el-tab-pane>
     <!-- 员工统计 -->
-    <el-tab-pane label="员工统计" name="third">
+    <el-tab-pane label="员工统计" name="second">
         <!-- 员工统计 -->
         <!-- 员工 -->
         <div class="zuo">
@@ -182,25 +182,26 @@ import * as echarts from 'echarts'
         trigger: 'item',
         formatter: '{a} <br/>{b} : {c} ({d}%)'
     },
-    legend: {
-        orient: 'vertical',
-        left: 'left',
-        data: ['xxx', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
-    },
-    series: [
-        {
-            name: '访问来源',
-            type: 'pie',
-            radius: '55%',
-            center: ['50%', '60%'],
-            data: [
-                {value: 335, name: 'xxx'},
-                {value: 310, name: '邮件营销'},
-                {value: 234, name: '联盟广告'},
-                {value: 135, name: '视频广告'},
-                {value: 1548, name: '搜索引擎'}
-            ],
-            emphasis: {
+           legend: {
+               orient: 'vertical',
+               left: 'left',
+               data: ['上衣和T恤', '连帽衫和套头衫', '配件和装备', '长裤和紧身裤', '鞋类']
+           },
+           series: [
+               {
+                   name: '访问来源',
+                   type: 'pie',
+                   radius: '55%',
+                   center: ['50%', '60%'],
+                   data: [
+                       {value: 335, name: '上衣和T恤'},
+                       {value: 310, name: '连帽衫和套头衫'},
+                       {value: 234, name: '配件和装备'},
+                       {value: 135, name: '长裤和紧身裤'},
+                       {value: 1548, name: '鞋类'}
+                   ],
+
+                   emphasis: {
                 itemStyle: {
                     shadowBlur: 10,
                     shadowOffsetX: 0,

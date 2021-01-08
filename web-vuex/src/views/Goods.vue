@@ -1,6 +1,15 @@
 r<template>
   <!-- 商品管理页 -->
   <div class="page1">
+    <!-- 面包屑导航区域 -->
+    <el-breadcrumb separator-class="el-icon-arrow-right">
+      <el-breadcrumb-item :to="{ path: '/about/welcome' }"
+        >首页</el-breadcrumb-item
+      >
+      <el-breadcrumb-item>仓库管理</el-breadcrumb-item>
+      <el-breadcrumb-item>仓库管理</el-breadcrumb-item>
+    </el-breadcrumb>
+
     <el-collapse v-model="activeNames" @change="handleChange">
       <el-collapse-item name="1">
         <template slot="title"> </template>
@@ -20,11 +29,7 @@ r<template>
           点我新增
         </el-button>
 
-        <el-drawer
-          :visible.sync="drawer"
-          :direction="direction"
-          :size="size"
-        >
+        <el-drawer :visible.sync="drawer" :direction="direction" :size="size">
           <el-form ref="form" :model="goodsAddData" label-width="80px">
             <p>基本信息</p>
             <el-row>
@@ -32,7 +37,7 @@ r<template>
               <el-col span="8">
                 <el-form-item label="一级分类">
                   <el-select
-                          @change="oneId"
+                    @change="oneId"
                     v-model="oneType1"
                     placeholder="请选择"
                     label-width="120px"
@@ -50,7 +55,7 @@ r<template>
               <el-col span="8">
                 <el-form-item label="二级分类">
                   <el-select
-                          @change="twoId"
+                    @change="twoId"
                     v-model="twoType1"
                     placeholder="请选择"
                     style="width: 200px"
@@ -123,17 +128,15 @@ r<template>
                   ></el-input>
                 </el-form-item>
                 <el-form-item label="是否上架">
-                  <template >
-
-                      <el-radio-group v-model="radio" @change="shangjia">
-                          <el-radio v-model="goodsAddData.state" :label="1"
-                          >立即上架</el-radio
-                          >
-                          <el-radio v-model="goodsAddData.state" :label="2"
-                          >暂不上架</el-radio
-                          >
-                      </el-radio-group>
-
+                  <template>
+                    <el-radio-group v-model="radio" @change="shangjia">
+                      <el-radio v-model="goodsAddData.state" :label="1"
+                        >立即上架</el-radio
+                      >
+                      <el-radio v-model="goodsAddData.state" :label="2"
+                        >暂不上架</el-radio
+                      >
+                    </el-radio-group>
                   </template>
                 </el-form-item>
               </el-col>
@@ -143,43 +146,16 @@ r<template>
               <el-col span="16">
                 <el-form-item label="商品商品图片">
                   <el-upload
-                    action="#"
+                    action="https://jsonplaceholder.typicode.com/posts/"
                     list-type="picture-card"
-                    :auto-upload="false"
+                    :on-preview="handlePictureCardPreview"
+                    :on-remove="handleRemove"
+                    :on-success="handleAvatarSuccess"
                   >
-                    <i slot="default" class="el-icon-plus"></i>
-                    <div slot="file" slot-scope="{ file }">
-                      <img
-                        class="el-upload-list__item-thumbnail"
-                        :src="file.url"
-                        alt=""
-                      />
-                      <span class="el-upload-list__item-actions">
-                        <span
-                          class="el-upload-list__item-preview"
-                          @click="handlePictureCardPreview(file)"
-                        >
-                          <i class="el-icon-zoom-in"></i>
-                        </span>
-                        <span
-                          v-if="!disabled"
-                          class="el-upload-list__item-delete"
-                          @click="handleDownload(file)"
-                        >
-                          <i class="el-icon-download"></i>
-                        </span>
-                        <span
-                          v-if="!disabled"
-                          class="el-upload-list__item-delete"
-                          @click="handleRemove(file)"
-                        >
-                          <i class="el-icon-delete"></i>
-                        </span>
-                      </span>
-                    </div>
+                    <i class="el-icon-plus"></i>
                   </el-upload>
-                  <el-dialog :visible.sync="addgoodsImgVisible">
-                    <img width="100%" :src="addgoodsImgImageUrl" alt="" />
+                  <el-dialog :visible.sync="dialogVisible">
+                    <img width="100%" :src="dialogImageUrl" alt="" />
                   </el-dialog>
                 </el-form-item>
               </el-col>
@@ -214,15 +190,17 @@ r<template>
               ></el-input>
             </el-form-item>
 
-            <el-form-item label="" >
-              <el-cascader :options="typeData" clearable 
-               :props="{
-                      checkStrictly:true,
-                      expandTrigger: 'hover',
-                      value:'type' ,
-                      label: 'name',
-                      children: 'list',
-              }"
+            <el-form-item label="">
+              <el-cascader
+                :options="typeData"
+                clearable
+                :props="{
+                  checkStrictly: true,
+                  expandTrigger: 'hover',
+                  value: 'type',
+                  label: 'name',
+                  children: 'list',
+                }"
               ></el-cascader>
             </el-form-item>
 
@@ -261,18 +239,18 @@ r<template>
             @row-click="getDataClick"
           >
             <el-table-column type="selection" width="55"> </el-table-column>
-            <el-table-column prop="code" label="商品编码" width="">
+            <el-table-column prop="createTime" label="商品编码" width="">
             </el-table-column>
             <el-table-column prop="name" label="商品名称" width="120">
             </el-table-column>
-            <el-table-column prop="price" label="价格"> </el-table-column>
+            <!--<el-table-column prop="price" label="价格"> </el-table-column>-->
 
             <el-table-column prop="num" label="库存"> </el-table-column>
             <el-table-column prop="xiaoliang" label="销量"> </el-table-column>
             <el-table-column prop="freight" label="运费" width="120px">
             </el-table-column>
-            <el-table-column prop="pic" label="图片"> </el-table-column>
-            <el-table-column prop="data" label="创建日期"> </el-table-column>
+            <!--<el-table-column prop="pic" label="图片"> </el-table-column>-->
+            <!--<el-table-column prop="data" label="创建日期"> </el-table-column>-->
             <el-table-column prop="state" label="状态">
               <template slot-scope="scope">
                 <span v-if="scope.row.state == 0">未上架</span>
@@ -283,7 +261,7 @@ r<template>
 
             <el-table-column label="操作" width="220px">
               <template>
-                <el-button size="mini" @click="downGoods()">下架</el-button>
+                <el-button size="mini" @click="downGoods">下架</el-button>
                 <el-button size="mini" @click="editGoodsVisible = true"
                   >编辑</el-button
                 >
@@ -308,12 +286,12 @@ r<template>
             </el-table-column>
             <el-table-column prop="price" label="价格"> </el-table-column>
 
-            <el-table-column prop="num" label="库存"> </el-table-column>
+            <!--<el-table-column prop="num" label="库存"> </el-table-column>-->
             <el-table-column prop="xiaoliang" label="销量"> </el-table-column>
             <el-table-column prop="freight" label="运费" width="120px">
             </el-table-column>
-            <el-table-column prop="pic" label="图片"> </el-table-column>
-            <el-table-column prop="data" label="创建日期"> </el-table-column>
+            <!--<el-table-column prop="pic" label="图片"> </el-table-column>-->
+            <!--<el-table-column prop="data" label="创建日期"> </el-table-column>-->
             <el-table-column prop="state" label="状态">
               <template slot-scope="scope">
                 <span v-if="scope.row.state == 0">未上架</span>
@@ -349,12 +327,12 @@ r<template>
             </el-table-column>
             <el-table-column prop="price" label="价格"> </el-table-column>
 
-            <el-table-column prop="num" label="库存"> </el-table-column>
+            <!--<el-table-column prop="num" label="库存"> </el-table-column>-->
             <el-table-column prop="xiaoliang" label="销量"> </el-table-column>
             <el-table-column prop="freight" label="运费" width="120px">
             </el-table-column>
-            <el-table-column prop="pic" label="图片"> </el-table-column>
-            <el-table-column prop="data" label="创建日期"> </el-table-column>
+            <!--<el-table-column prop="pic" label="图片"> </el-table-column>-->
+            <!--<el-table-column prop="data" label="创建日期"> </el-table-column>-->
             <el-table-column prop="state" label="状态">
               <template slot-scope="scope">
                 <span v-if="scope.row.state == 0">未上架</span>
@@ -388,7 +366,7 @@ r<template>
               :page-sizes="[5, 10, 15, 20]"
               :page-size="5"
               layout="total, sizes, prev, pager, next, jumper"
-              :total="this.tableTotal"
+              :total="tableTotal"
             >
             </el-pagination>
           </div>
@@ -537,16 +515,17 @@ export default {
   name: "goods",
   data() {
     return {
-        //二级一级类别联动
-        twoTypes:[
-
-        ],
-        //二级分类选择框
-        twoType1:'',
-        //一级类别选择框
-        oneType1:'',
-        //单选
-        radio: 1,
+      //上传图片
+      dialogImageUrl: "",
+      dialogVisible: false,
+      //二级一级类别联动
+      twoTypes: [],
+      //二级分类选择框
+      twoType1: "",
+      //一级类别选择框
+      oneType1: "",
+      //单选
+      radio: 1,
 
       // 商品新增打开方式
       drawer: false,
@@ -558,8 +537,8 @@ export default {
         code: "", //商品编码
         type: "", //所属分类
       },
-        //
-        imageUrl:'',
+      //
+      imageUrl: "",
       //表格
       tableData: [
         {
@@ -573,7 +552,7 @@ export default {
           state: this.state, //商品状态
           typeId: this.typeId, //商品类型id
           typeName: this.typeName, //类型名称
-          code: this.code, //商品编号
+          code: this.createTime, //商品编号
         },
       ],
 
@@ -587,6 +566,7 @@ export default {
         freight: "", //商品运费
         description: "", //商品描述
         state: 1, //商品状态
+        pic: this.dialogImageUrl, //图片
       },
 
       // 商品编辑
@@ -603,13 +583,12 @@ export default {
         id: "", //当前数据ID
       },
 
-     
       // 商品新增图片上传窗口
       addgoodsImgImageUrl: "",
       addgoodsImgVisible: false,
       disabled: false,
 
-      activeName: "first",
+      activeName: "1",
       //编辑弹框
       editGoodsVisible: false,
       dialogFormVisible: false,
@@ -626,131 +605,123 @@ export default {
       //查询的下拉框值
       typeData: [
         {
-          id:"1",
+          id: "1",
           type: "aaa",
           name: "aaa",
           list: [
             {
-              type:"设计原则q" ,
+              type: "设计原则q",
               name: "设计原则",
             },
           ],
         },
         {
-          id:"2",
+          id: "2",
           type: "bbb",
           name: "bbb",
           list: [
             {
-              type:"设计原则2" ,
+              type: "设计原则2",
               name: "设计原则",
             },
           ],
-        }
+        },
       ],
-       //一级分类
-      oneType: [
-
-      ],
+      //一级分类
+      oneType: [],
       //二级分类
-      twoType: [
-
-      ],
+      twoType: [],
     };
   },
 
   // 组件加载请求列表接口
   mounted() {
     this.selectDataAll(); // 获取请求列表
-    this. selectType();//获取所有分类
-    this.query()//查询类别
+    this.selectType(); //获取所有分类
+    this.query(); //查询类别
   },
   methods: {
-      //获取一级类别id
-      oneId(){
-          this.goodsAddData.type=this.oneType1;
-          console.log(this.oneType1)
-          for(let i=0;i<this.twoTypes.length;i++){
-              if(this.oneType1==this.twoTypes[i].typeId){
-                  this.twoType=[];
-                 this.twoType.push(this.twoTypes[i])
-              }
+    //获取一级类别id
+    oneId() {
+      this.goodsAddData.type = this.oneType1;
+      console.log(this.oneType1);
+      for (let i = 0; i < this.twoTypes.length; i++) {
+        if (this.oneType1 == this.twoTypes[i].typeId) {
+          this.twoType = [];
+          this.twoType.push(this.twoTypes[i]);
+        }
+      }
+    },
+    //获取二级类别id
+    twoId() {
+      this.goodsAddData.typeId = this.twoType1;
+      console.log(this.twoType1);
+    },
+    //查询类别
+    query() {
+      this.$axios({
+        url: "/goodsType/findGoodsTypeAll",
+        method: "get",
+        params: "",
+      })
+        .then((res) => {
+          // console.log('yyyy',res)
+          let json = {};
+          let n = null;
+          for (let i = 0; i < res.data.date.length; i++) {
+            this.oneType.push({
+              typeName: res.data.date[i].name,
+              typeId: res.data.date[i].id,
+            });
+            for (let j = 0; j < res.data.date[i].list.length; j++) {
+              this.twoTypes.push({
+                name: res.data.date[i].list[j].name,
+                typeId: res.data.date[i].list[j].typeId,
+                id: res.data.date[i].list[j].id,
+              });
+            }
           }
+          // console.log('uuuu',this.oneType)
+        })
+        .catch((err) => {});
+    },
 
-      },
-      //获取二级类别id
-      twoId(){
-          this.goodsAddData.typeId=this.twoType1;
-          console.log(this.twoType1)
-      },
-      //查询类别
-      query(){
-          this.$axios({
-              url:'/goodsType/findGoodsTypeAll',
-              method:'get',
-              params:''
-          }).then((res)=>{
-              console.log('yyyy',res)
-              let json={};
-              let n=null;
-              for(let i=0;i<res.data.date.length;i++){
-                        this.oneType.push(
-                            {
-                                typeName:res.data.date[i].name,
-                                typeId:res.data.date[i].id
-                            })
-                  for(let j=0;j<res.data.date[i].list.length;j++){
-                      this.twoTypes.push(
-                          {
-                              name:res.data.date[i].list[j].name,
-                              typeId:res.data.date[i].list[j].typeId,
-                              id:res.data.date[i].list[j].id
-                          }
-                      )
-                  }
-              }
-              console.log('uuuu',this.oneType)
-          }).catch((err)=>{
+    //商品新增
 
-          })
-      },
-
-
-      //商品新增
-
-      //上架
-      shangjia(){
-          console.log(this.radio)
-          this.goodsAddData.state=this.radio
-      },
-      //新增
-      add(){
-          this.$axios({
-              url:'/commodity/addCommodity',
-              method:'post',
-              data:this.goodsAddData
-          }).then((res)=>{
-            alert('成功');
-            console.log(res)
-          }).catch((err)=>{
-              console.log(err)
-          })
-      },
- // 查询列表上所属分类
+    //上架
+    shangjia() {
+      console.log(this.radio);
+      this.goodsAddData.state = this.radio;
+    },
+    //新增
+    add() {
+      console.log(this.goodsAddData);
+      this.$axios({
+        url: "/commodity/addCommodity",
+        method: "post",
+        data: this.goodsAddData,
+      })
+        .then((res) => {
+          alert("成功");
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    // 查询列表上所属分类
     selectType() {
       this.$axios({
         url: "/goodsType/findGoodsTypeAll",
         method: "get",
       })
         .then((res) => {
-        this.typeData=res.data.date,
-        this.oneType.value=this.typeData.id,
-        this.oneType.name=this.typeData.name,
-
-        console.log(res)
-        console.log(this.typeData,'这是查询所有分类数据')
-        console.log(this.oneType,'这是一级分类的数据')
-
+          (this.typeData = res.data.date),
+            (this.oneType.value = this.typeData.id),
+            (this.oneType.name = this.typeData.name),
+            console.log(res);
+          console.log(this.typeData, "这是查询所有分类数据");
+          console.log(this.oneType, "这是一级分类的数据");
         })
         .catch((err) => {
           alert(err);
@@ -761,11 +732,15 @@ export default {
       this.$axios({
         url: "/commodity/findByGoods",
         method: "post",
-        data: this.selectdata      
+        data: this.selectdata,
       })
         .then((res) => {
-          // this.tableTotal = res.data.date.count; //获取总条数
-          console.log(res);
+          this.tableData = [];
+          this.tableTotal = res.data.date.count; //获取总条数
+          for (let i = 0; i < res.data.date.length; i++) {
+            this.tableData.push(res.data.date[i]);
+          }
+          // console.log(res);
         })
         .catch((err) => {
           alert(err);
@@ -795,8 +770,9 @@ export default {
       })
         .then((res) => {
           this.tableData = res.data.date.date; //获取表格数据
-          console.log(this.tableData);
+          // console.log(this.tableData,'ggggg');
           this.tableTotal = res.data.date.count; //获取总条数
+          console.log(this.tableTotal, "总条数");
           // console.log(res);
         })
         .catch((err) => {
@@ -804,7 +780,6 @@ export default {
         });
     },
 
- 
     // 点击获取一行数据
     getDataClick(val) {
       this.thisRowData = val;
@@ -818,8 +793,7 @@ export default {
         data: this.thisRowData,
       })
         .then((res) => {
-          alert("编辑成功"), 
-          this.editGoodsVisible = false
+          alert("编辑成功"), (this.editGoodsVisible = false);
         })
         .catch((err) => {
           console.log(err);
@@ -864,17 +838,20 @@ export default {
         });
     },
 
-    
     //图片上传
-    handleRemove(file) {
-      console.log(file);
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
     },
     handlePictureCardPreview(file) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
+      this.goodsAddData.pic = this.dialogImageUrl;
+      console.log(this.dialogImageUrl);
     },
-    handleDownload(file) {
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw);
       console.log(file);
+      this.goodsAddData.pic = file.name;
     },
 
     //页码
@@ -895,8 +872,6 @@ export default {
         customClass: "del",
       })
         .then(() => {
-
-          
           this.$message({
             type: "success",
             message: "删除成功!",
@@ -909,8 +884,6 @@ export default {
           });
         });
     },
-
-
 
     //多选
     toggleSelection(rows) {
